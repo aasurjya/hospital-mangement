@@ -1,0 +1,2242 @@
+{
+  "info": {
+    "_postman_id": "hospital-os-seed",
+    "name": "HospitalOS — Seed Local Data",
+    "description": "Seeds a local Supabase instance with realistic test data for the HospitalOS platform.\n\nRun requests in order (or use Collection Runner). Each request saves returned IDs to collection variables so later requests can reference them as foreign keys.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      { "key": "key", "value": "apikey", "type": "string" },
+      { "key": "value", "value": "{{service_role_key}}", "type": "string" },
+      { "key": "in", "value": "header", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "hospital_city_general_id", "value": "" },
+    { "key": "hospital_riverside_id", "value": "" },
+    { "key": "user_admin_cg_id", "value": "" },
+    { "key": "user_admin_rv_id", "value": "" },
+    { "key": "user_doctor1_cg_id", "value": "" },
+    { "key": "user_doctor2_cg_id", "value": "" },
+    { "key": "user_nurse_cg_id", "value": "" },
+    { "key": "user_receptionist_cg_id", "value": "" },
+    { "key": "user_doctor_rv_id", "value": "" },
+    { "key": "dept_emergency_cg_id", "value": "" },
+    { "key": "dept_internal_med_cg_id", "value": "" },
+    { "key": "dept_cardiology_cg_id", "value": "" },
+    { "key": "dept_emergency_rv_id", "value": "" },
+    { "key": "dept_pediatrics_rv_id", "value": "" },
+    { "key": "room_101_cg_id", "value": "" },
+    { "key": "room_102_cg_id", "value": "" },
+    { "key": "room_201_cg_id", "value": "" },
+    { "key": "room_301_cg_id", "value": "" },
+    { "key": "room_er1_cg_id", "value": "" },
+    { "key": "room_er2_cg_id", "value": "" },
+    { "key": "room_101_rv_id", "value": "" },
+    { "key": "room_201_rv_id", "value": "" },
+    { "key": "patient_1_id", "value": "" },
+    { "key": "patient_2_id", "value": "" },
+    { "key": "patient_3_id", "value": "" },
+    { "key": "patient_4_id", "value": "" },
+    { "key": "patient_5_id", "value": "" },
+    { "key": "patient_6_id", "value": "" },
+    { "key": "patient_7_id", "value": "" },
+    { "key": "patient_8_id", "value": "" },
+    { "key": "patient_rv_1_id", "value": "" },
+    { "key": "patient_rv_2_id", "value": "" },
+    { "key": "appt_1_id", "value": "" },
+    { "key": "appt_2_id", "value": "" },
+    { "key": "appt_3_id", "value": "" },
+    { "key": "appt_4_id", "value": "" },
+    { "key": "appt_5_id", "value": "" },
+    { "key": "appt_6_id", "value": "" },
+    { "key": "appt_7_id", "value": "" },
+    { "key": "appt_8_id", "value": "" },
+    { "key": "admission_1_id", "value": "" },
+    { "key": "admission_2_id", "value": "" },
+    { "key": "admission_3_id", "value": "" },
+    { "key": "admission_rv_1_id", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "1. Setup — Hospitals",
+      "item": [
+        {
+          "name": "Create City General Hospital",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('hospital_city_general_id', res[0].id);",
+                  "  pm.test('Hospital created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"City General Hospital\",\n  \"slug\": \"city-general\",\n  \"address\": \"450 Medical Center Drive, Springfield, IL 62701\",\n  \"phone\": \"+1-217-555-0100\",\n  \"email\": \"info@citygeneral.dev\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/hospitals",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "hospitals"]
+            }
+          }
+        },
+        {
+          "name": "Create Riverside Medical Center",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('hospital_riverside_id', res[0].id);",
+                  "  pm.test('Hospital created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Riverside Medical Center\",\n  \"slug\": \"riverside\",\n  \"address\": \"1200 River Road, Springfield, IL 62702\",\n  \"phone\": \"+1-217-555-0200\",\n  \"email\": \"info@riverside.dev\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/hospitals",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "hospitals"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Setup — Users",
+      "description": "Each user requires two requests: one to create the auth user (with app_metadata for RLS), and one to create the user_profiles row.",
+      "item": [
+        {
+          "name": "Create Auth — Hospital Admin (City General)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res.id) {",
+                  "  pm.collectionVariables.set('user_admin_cg_id', res.id);",
+                  "  pm.test('Auth user created', () => pm.response.to.have.status(200));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@citygeneral.dev\",\n  \"password\": \"{{dev_password}}\",\n  \"email_confirm\": true,\n  \"app_metadata\": {\n    \"hospital_id\": \"{{hospital_city_general_id}}\",\n    \"role\": \"HOSPITAL_ADMIN\"\n  },\n  \"user_metadata\": {\n    \"full_name\": \"Sarah Chen\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/auth/v1/admin/users",
+              "host": ["{{supabase_url}}"],
+              "path": ["auth", "v1", "admin", "users"]
+            }
+          }
+        },
+        {
+          "name": "Create Profile — Hospital Admin (City General)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Profile created', () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{user_admin_cg_id}}\",\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"role\": \"HOSPITAL_ADMIN\",\n  \"full_name\": \"Sarah Chen\",\n  \"display_name\": \"Sarah\",\n  \"phone\": \"+1-217-555-0101\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/user_profiles",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "user_profiles"]
+            }
+          }
+        },
+        {
+          "name": "Create Auth — Hospital Admin (Riverside)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res.id) {",
+                  "  pm.collectionVariables.set('user_admin_rv_id', res.id);",
+                  "  pm.test('Auth user created', () => pm.response.to.have.status(200));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@riverside.dev\",\n  \"password\": \"{{dev_password}}\",\n  \"email_confirm\": true,\n  \"app_metadata\": {\n    \"hospital_id\": \"{{hospital_riverside_id}}\",\n    \"role\": \"HOSPITAL_ADMIN\"\n  },\n  \"user_metadata\": {\n    \"full_name\": \"Robert Kim\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/auth/v1/admin/users",
+              "host": ["{{supabase_url}}"],
+              "path": ["auth", "v1", "admin", "users"]
+            }
+          }
+        },
+        {
+          "name": "Create Profile — Hospital Admin (Riverside)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Profile created', () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{user_admin_rv_id}}\",\n  \"hospital_id\": \"{{hospital_riverside_id}}\",\n  \"role\": \"HOSPITAL_ADMIN\",\n  \"full_name\": \"Robert Kim\",\n  \"display_name\": \"Robert\",\n  \"phone\": \"+1-217-555-0201\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/user_profiles",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "user_profiles"]
+            }
+          }
+        },
+        {
+          "name": "Create Auth — Doctor 1 (City General)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res.id) {",
+                  "  pm.collectionVariables.set('user_doctor1_cg_id', res.id);",
+                  "  pm.test('Auth user created', () => pm.response.to.have.status(200));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"dr.wilson@citygeneral.dev\",\n  \"password\": \"{{dev_password}}\",\n  \"email_confirm\": true,\n  \"app_metadata\": {\n    \"hospital_id\": \"{{hospital_city_general_id}}\",\n    \"role\": \"DOCTOR\"\n  },\n  \"user_metadata\": {\n    \"full_name\": \"Dr. James Wilson\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/auth/v1/admin/users",
+              "host": ["{{supabase_url}}"],
+              "path": ["auth", "v1", "admin", "users"]
+            }
+          }
+        },
+        {
+          "name": "Create Profile — Doctor 1 (City General)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Profile created', () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{user_doctor1_cg_id}}\",\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"role\": \"DOCTOR\",\n  \"full_name\": \"Dr. James Wilson\",\n  \"display_name\": \"Dr. Wilson\",\n  \"phone\": \"+1-217-555-0102\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/user_profiles",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "user_profiles"]
+            }
+          }
+        },
+        {
+          "name": "Create Auth — Doctor 2 (City General)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res.id) {",
+                  "  pm.collectionVariables.set('user_doctor2_cg_id', res.id);",
+                  "  pm.test('Auth user created', () => pm.response.to.have.status(200));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"dr.park@citygeneral.dev\",\n  \"password\": \"{{dev_password}}\",\n  \"email_confirm\": true,\n  \"app_metadata\": {\n    \"hospital_id\": \"{{hospital_city_general_id}}\",\n    \"role\": \"DOCTOR\"\n  },\n  \"user_metadata\": {\n    \"full_name\": \"Dr. Emily Park\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/auth/v1/admin/users",
+              "host": ["{{supabase_url}}"],
+              "path": ["auth", "v1", "admin", "users"]
+            }
+          }
+        },
+        {
+          "name": "Create Profile — Doctor 2 (City General)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Profile created', () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{user_doctor2_cg_id}}\",\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"role\": \"DOCTOR\",\n  \"full_name\": \"Dr. Emily Park\",\n  \"display_name\": \"Dr. Park\",\n  \"phone\": \"+1-217-555-0103\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/user_profiles",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "user_profiles"]
+            }
+          }
+        },
+        {
+          "name": "Create Auth — Nurse (City General)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res.id) {",
+                  "  pm.collectionVariables.set('user_nurse_cg_id', res.id);",
+                  "  pm.test('Auth user created', () => pm.response.to.have.status(200));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"nurse.santos@citygeneral.dev\",\n  \"password\": \"{{dev_password}}\",\n  \"email_confirm\": true,\n  \"app_metadata\": {\n    \"hospital_id\": \"{{hospital_city_general_id}}\",\n    \"role\": \"NURSE\"\n  },\n  \"user_metadata\": {\n    \"full_name\": \"Maria Santos\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/auth/v1/admin/users",
+              "host": ["{{supabase_url}}"],
+              "path": ["auth", "v1", "admin", "users"]
+            }
+          }
+        },
+        {
+          "name": "Create Profile — Nurse (City General)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Profile created', () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{user_nurse_cg_id}}\",\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"role\": \"NURSE\",\n  \"full_name\": \"Maria Santos\",\n  \"display_name\": \"Maria\",\n  \"phone\": \"+1-217-555-0104\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/user_profiles",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "user_profiles"]
+            }
+          }
+        },
+        {
+          "name": "Create Auth — Receptionist (City General)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res.id) {",
+                  "  pm.collectionVariables.set('user_receptionist_cg_id', res.id);",
+                  "  pm.test('Auth user created', () => pm.response.to.have.status(200));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"reception@citygeneral.dev\",\n  \"password\": \"{{dev_password}}\",\n  \"email_confirm\": true,\n  \"app_metadata\": {\n    \"hospital_id\": \"{{hospital_city_general_id}}\",\n    \"role\": \"RECEPTIONIST\"\n  },\n  \"user_metadata\": {\n    \"full_name\": \"Alex Johnson\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/auth/v1/admin/users",
+              "host": ["{{supabase_url}}"],
+              "path": ["auth", "v1", "admin", "users"]
+            }
+          }
+        },
+        {
+          "name": "Create Profile — Receptionist (City General)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Profile created', () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{user_receptionist_cg_id}}\",\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"role\": \"RECEPTIONIST\",\n  \"full_name\": \"Alex Johnson\",\n  \"display_name\": \"Alex\",\n  \"phone\": \"+1-217-555-0105\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/user_profiles",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "user_profiles"]
+            }
+          }
+        },
+        {
+          "name": "Create Auth — Doctor (Riverside)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res.id) {",
+                  "  pm.collectionVariables.set('user_doctor_rv_id', res.id);",
+                  "  pm.test('Auth user created', () => pm.response.to.have.status(200));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"dr.patel@riverside.dev\",\n  \"password\": \"{{dev_password}}\",\n  \"email_confirm\": true,\n  \"app_metadata\": {\n    \"hospital_id\": \"{{hospital_riverside_id}}\",\n    \"role\": \"DOCTOR\"\n  },\n  \"user_metadata\": {\n    \"full_name\": \"Dr. Lisa Patel\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/auth/v1/admin/users",
+              "host": ["{{supabase_url}}"],
+              "path": ["auth", "v1", "admin", "users"]
+            }
+          }
+        },
+        {
+          "name": "Create Profile — Doctor (Riverside)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Profile created', () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{user_doctor_rv_id}}\",\n  \"hospital_id\": \"{{hospital_riverside_id}}\",\n  \"role\": \"DOCTOR\",\n  \"full_name\": \"Dr. Lisa Patel\",\n  \"display_name\": \"Dr. Patel\",\n  \"phone\": \"+1-217-555-0202\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/user_profiles",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "user_profiles"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Setup — Departments",
+      "item": [
+        {
+          "name": "Create Emergency Dept (City General)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('dept_emergency_cg_id', res[0].id);",
+                  "  pm.test('Department created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"name\": \"Emergency Department\",\n  \"description\": \"24/7 emergency and trauma care\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/departments",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "departments"]
+            }
+          }
+        },
+        {
+          "name": "Create Internal Medicine Dept (City General)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('dept_internal_med_cg_id', res[0].id);",
+                  "  pm.test('Department created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"name\": \"Internal Medicine\",\n  \"description\": \"General adult medicine and diagnostics\",\n  \"head_doctor_id\": \"{{user_doctor1_cg_id}}\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/departments",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "departments"]
+            }
+          }
+        },
+        {
+          "name": "Create Cardiology Dept (City General)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('dept_cardiology_cg_id', res[0].id);",
+                  "  pm.test('Department created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"name\": \"Cardiology\",\n  \"description\": \"Heart and cardiovascular care\",\n  \"head_doctor_id\": \"{{user_doctor2_cg_id}}\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/departments",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "departments"]
+            }
+          }
+        },
+        {
+          "name": "Create Emergency Dept (Riverside)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('dept_emergency_rv_id', res[0].id);",
+                  "  pm.test('Department created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_riverside_id}}\",\n  \"name\": \"Emergency Department\",\n  \"description\": \"Emergency and urgent care\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/departments",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "departments"]
+            }
+          }
+        },
+        {
+          "name": "Create Pediatrics Dept (Riverside)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('dept_pediatrics_rv_id', res[0].id);",
+                  "  pm.test('Department created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_riverside_id}}\",\n  \"name\": \"Pediatrics\",\n  \"description\": \"Children and adolescent care\",\n  \"head_doctor_id\": \"{{user_doctor_rv_id}}\",\n  \"is_active\": true\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/departments",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "departments"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Setup — Rooms",
+      "item": [
+        {
+          "name": "Create Room 101 — General (City General)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('room_101_cg_id', res[0].id);",
+                  "  pm.test('Room created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"room_number\": \"101\",\n  \"room_type\": \"GENERAL\",\n  \"floor\": \"1\",\n  \"is_available\": true,\n  \"is_active\": true,\n  \"notes\": \"4-bed general ward\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/rooms",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "rooms"]
+            }
+          }
+        },
+        {
+          "name": "Create Room 102 — General (City General)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('room_102_cg_id', res[0].id);",
+                  "  pm.test('Room created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"room_number\": \"102\",\n  \"room_type\": \"PRIVATE\",\n  \"floor\": \"1\",\n  \"is_available\": true,\n  \"is_active\": true,\n  \"notes\": \"Single-bed private room\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/rooms",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "rooms"]
+            }
+          }
+        },
+        {
+          "name": "Create Room 201 — Semi-Private (City General)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('room_201_cg_id', res[0].id);",
+                  "  pm.test('Room created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"room_number\": \"201\",\n  \"room_type\": \"SEMI_PRIVATE\",\n  \"floor\": \"2\",\n  \"is_available\": true,\n  \"is_active\": true,\n  \"notes\": \"2-bed semi-private room\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/rooms",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "rooms"]
+            }
+          }
+        },
+        {
+          "name": "Create Room 301 — ICU (City General)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('room_301_cg_id', res[0].id);",
+                  "  pm.test('Room created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"room_number\": \"301\",\n  \"room_type\": \"ICU\",\n  \"floor\": \"3\",\n  \"is_available\": true,\n  \"is_active\": true,\n  \"notes\": \"Intensive care unit bed\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/rooms",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "rooms"]
+            }
+          }
+        },
+        {
+          "name": "Create Room ER-1 — Emergency (City General)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('room_er1_cg_id', res[0].id);",
+                  "  pm.test('Room created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"room_number\": \"ER-1\",\n  \"room_type\": \"EMERGENCY\",\n  \"floor\": \"G\",\n  \"is_available\": true,\n  \"is_active\": true,\n  \"notes\": \"Emergency bay 1\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/rooms",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "rooms"]
+            }
+          }
+        },
+        {
+          "name": "Create Room ER-2 — Emergency (City General)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('room_er2_cg_id', res[0].id);",
+                  "  pm.test('Room created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"room_number\": \"ER-2\",\n  \"room_type\": \"EMERGENCY\",\n  \"floor\": \"G\",\n  \"is_available\": true,\n  \"is_active\": true,\n  \"notes\": \"Emergency bay 2\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/rooms",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "rooms"]
+            }
+          }
+        },
+        {
+          "name": "Create Room 101 — General (Riverside)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('room_101_rv_id', res[0].id);",
+                  "  pm.test('Room created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_riverside_id}}\",\n  \"room_number\": \"101\",\n  \"room_type\": \"GENERAL\",\n  \"floor\": \"1\",\n  \"is_available\": true,\n  \"is_active\": true,\n  \"notes\": \"General pediatric ward\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/rooms",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "rooms"]
+            }
+          }
+        },
+        {
+          "name": "Create Room 201 — Private (Riverside)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('room_201_rv_id', res[0].id);",
+                  "  pm.test('Room created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_riverside_id}}\",\n  \"room_number\": \"201\",\n  \"room_type\": \"PRIVATE\",\n  \"floor\": \"2\",\n  \"is_available\": true,\n  \"is_active\": true,\n  \"notes\": \"Private pediatric room\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/rooms",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "rooms"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Clinical — Patients",
+      "item": [
+        {
+          "name": "Create Patient 1 — John Smith",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('patient_1_id', res[0].id);",
+                  "  pm.test('Patient created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"mrn\": \"MRN-2026-A1B2C3D4\",\n  \"full_name\": \"John Smith\",\n  \"date_of_birth\": \"1985-03-15\",\n  \"gender\": \"MALE\",\n  \"blood_type\": \"O+\",\n  \"phone\": \"+1-217-555-1001\",\n  \"email\": \"john.smith@email.com\",\n  \"address\": \"123 Oak Street, Springfield, IL\",\n  \"emergency_contact_name\": \"Jane Smith\",\n  \"emergency_contact_phone\": \"+1-217-555-1002\",\n  \"insurance_provider\": \"Blue Cross\",\n  \"insurance_number\": \"BC-2026-001\",\n  \"created_by\": \"{{user_receptionist_cg_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/patients",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "patients"]
+            }
+          }
+        },
+        {
+          "name": "Create Patient 2 — Mary Johnson",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('patient_2_id', res[0].id);",
+                  "  pm.test('Patient created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"mrn\": \"MRN-2026-B2C3D4E5\",\n  \"full_name\": \"Mary Johnson\",\n  \"date_of_birth\": \"1972-07-22\",\n  \"gender\": \"FEMALE\",\n  \"blood_type\": \"A+\",\n  \"phone\": \"+1-217-555-1003\",\n  \"email\": \"mary.johnson@email.com\",\n  \"address\": \"456 Elm Avenue, Springfield, IL\",\n  \"emergency_contact_name\": \"Tom Johnson\",\n  \"emergency_contact_phone\": \"+1-217-555-1004\",\n  \"insurance_provider\": \"Aetna\",\n  \"insurance_number\": \"AE-2026-002\",\n  \"created_by\": \"{{user_receptionist_cg_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/patients",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "patients"]
+            }
+          }
+        },
+        {
+          "name": "Create Patient 3 — Robert Williams",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('patient_3_id', res[0].id);",
+                  "  pm.test('Patient created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"mrn\": \"MRN-2026-C3D4E5F6\",\n  \"full_name\": \"Robert Williams\",\n  \"date_of_birth\": \"1958-11-03\",\n  \"gender\": \"MALE\",\n  \"blood_type\": \"B+\",\n  \"phone\": \"+1-217-555-1005\",\n  \"address\": \"789 Pine Road, Springfield, IL\",\n  \"emergency_contact_name\": \"Susan Williams\",\n  \"emergency_contact_phone\": \"+1-217-555-1006\",\n  \"insurance_provider\": \"Medicare\",\n  \"insurance_number\": \"MC-2026-003\",\n  \"created_by\": \"{{user_receptionist_cg_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/patients",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "patients"]
+            }
+          }
+        },
+        {
+          "name": "Create Patient 4 — Linda Davis",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('patient_4_id', res[0].id);",
+                  "  pm.test('Patient created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"mrn\": \"MRN-2026-D4E5F6G7\",\n  \"full_name\": \"Linda Davis\",\n  \"date_of_birth\": \"1990-01-18\",\n  \"gender\": \"FEMALE\",\n  \"blood_type\": \"AB+\",\n  \"phone\": \"+1-217-555-1007\",\n  \"email\": \"linda.davis@email.com\",\n  \"address\": \"321 Maple Lane, Springfield, IL\",\n  \"emergency_contact_name\": \"Mike Davis\",\n  \"emergency_contact_phone\": \"+1-217-555-1008\",\n  \"insurance_provider\": \"United Health\",\n  \"insurance_number\": \"UH-2026-004\",\n  \"created_by\": \"{{user_receptionist_cg_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/patients",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "patients"]
+            }
+          }
+        },
+        {
+          "name": "Create Patient 5 — James Brown",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('patient_5_id', res[0].id);",
+                  "  pm.test('Patient created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"mrn\": \"MRN-2026-E5F6G7H8\",\n  \"full_name\": \"James Brown\",\n  \"date_of_birth\": \"1945-09-30\",\n  \"gender\": \"MALE\",\n  \"blood_type\": \"O-\",\n  \"phone\": \"+1-217-555-1009\",\n  \"address\": \"654 Birch Court, Springfield, IL\",\n  \"emergency_contact_name\": \"Patricia Brown\",\n  \"emergency_contact_phone\": \"+1-217-555-1010\",\n  \"insurance_provider\": \"Medicare\",\n  \"insurance_number\": \"MC-2026-005\",\n  \"created_by\": \"{{user_receptionist_cg_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/patients",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "patients"]
+            }
+          }
+        },
+        {
+          "name": "Create Patient 6 — Emma Garcia",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('patient_6_id', res[0].id);",
+                  "  pm.test('Patient created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"mrn\": \"MRN-2026-F6G7H8I9\",\n  \"full_name\": \"Emma Garcia\",\n  \"date_of_birth\": \"1998-05-12\",\n  \"gender\": \"FEMALE\",\n  \"blood_type\": \"A-\",\n  \"phone\": \"+1-217-555-1011\",\n  \"email\": \"emma.garcia@email.com\",\n  \"address\": \"987 Cedar Drive, Springfield, IL\",\n  \"emergency_contact_name\": \"Carlos Garcia\",\n  \"emergency_contact_phone\": \"+1-217-555-1012\",\n  \"insurance_provider\": \"Cigna\",\n  \"insurance_number\": \"CG-2026-006\",\n  \"created_by\": \"{{user_receptionist_cg_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/patients",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "patients"]
+            }
+          }
+        },
+        {
+          "name": "Create Patient 7 — William Taylor",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('patient_7_id', res[0].id);",
+                  "  pm.test('Patient created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"mrn\": \"MRN-2026-G7H8I9J0\",\n  \"full_name\": \"William Taylor\",\n  \"date_of_birth\": \"1967-12-08\",\n  \"gender\": \"MALE\",\n  \"blood_type\": \"B-\",\n  \"phone\": \"+1-217-555-1013\",\n  \"address\": \"246 Walnut Street, Springfield, IL\",\n  \"emergency_contact_name\": \"Dorothy Taylor\",\n  \"emergency_contact_phone\": \"+1-217-555-1014\",\n  \"insurance_provider\": \"Humana\",\n  \"insurance_number\": \"HU-2026-007\",\n  \"created_by\": \"{{user_receptionist_cg_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/patients",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "patients"]
+            }
+          }
+        },
+        {
+          "name": "Create Patient 8 — Olivia Martinez",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('patient_8_id', res[0].id);",
+                  "  pm.test('Patient created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"mrn\": \"MRN-2026-H8I9J0K1\",\n  \"full_name\": \"Olivia Martinez\",\n  \"date_of_birth\": \"2001-08-25\",\n  \"gender\": \"FEMALE\",\n  \"blood_type\": \"AB-\",\n  \"phone\": \"+1-217-555-1015\",\n  \"email\": \"olivia.martinez@email.com\",\n  \"address\": \"135 Spruce Way, Springfield, IL\",\n  \"emergency_contact_name\": \"Rosa Martinez\",\n  \"emergency_contact_phone\": \"+1-217-555-1016\",\n  \"insurance_provider\": \"Kaiser\",\n  \"insurance_number\": \"KP-2026-008\",\n  \"created_by\": \"{{user_receptionist_cg_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/patients",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "patients"]
+            }
+          }
+        },
+        {
+          "name": "Create Patient RV-1 — Aiden Cooper",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('patient_rv_1_id', res[0].id);",
+                  "  pm.test('Patient created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_riverside_id}}\",\n  \"mrn\": \"MRN-2026-RV01A1B2\",\n  \"full_name\": \"Aiden Cooper\",\n  \"date_of_birth\": \"2019-04-10\",\n  \"gender\": \"MALE\",\n  \"blood_type\": \"O+\",\n  \"phone\": \"+1-217-555-2001\",\n  \"address\": \"50 River Lane, Springfield, IL\",\n  \"emergency_contact_name\": \"Sarah Cooper\",\n  \"emergency_contact_phone\": \"+1-217-555-2002\",\n  \"insurance_provider\": \"Blue Cross\",\n  \"insurance_number\": \"BC-2026-RV01\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/patients",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "patients"]
+            }
+          }
+        },
+        {
+          "name": "Create Patient RV-2 — Sophia Lee",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('patient_rv_2_id', res[0].id);",
+                  "  pm.test('Patient created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_riverside_id}}\",\n  \"mrn\": \"MRN-2026-RV02B2C3\",\n  \"full_name\": \"Sophia Lee\",\n  \"date_of_birth\": \"2021-11-28\",\n  \"gender\": \"FEMALE\",\n  \"blood_type\": \"A+\",\n  \"phone\": \"+1-217-555-2003\",\n  \"address\": \"75 Brook Street, Springfield, IL\",\n  \"emergency_contact_name\": \"David Lee\",\n  \"emergency_contact_phone\": \"+1-217-555-2004\",\n  \"insurance_provider\": \"Aetna\",\n  \"insurance_number\": \"AE-2026-RV02\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/patients",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "patients"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Clinical — Appointments",
+      "item": [
+        {
+          "name": "Appointment 1 — SCHEDULED (tomorrow)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const tomorrow = new Date();",
+                  "tomorrow.setDate(tomorrow.getDate() + 1);",
+                  "tomorrow.setHours(9, 0, 0, 0);",
+                  "pm.collectionVariables.set('appt_1_scheduled_at', tomorrow.toISOString());"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('appt_1_id', res[0].id);",
+                  "  pm.test('Appointment created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"patient_id\": \"{{patient_1_id}}\",\n  \"doctor_id\": \"{{user_doctor1_cg_id}}\",\n  \"department_id\": \"{{dept_internal_med_cg_id}}\",\n  \"scheduled_at\": \"{{appt_1_scheduled_at}}\",\n  \"duration_minutes\": 30,\n  \"status\": \"SCHEDULED\",\n  \"reason\": \"Annual physical examination\",\n  \"created_by\": \"{{user_receptionist_cg_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/appointments",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "appointments"]
+            }
+          }
+        },
+        {
+          "name": "Appointment 2 — SCHEDULED (tomorrow PM)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const date = new Date();",
+                  "date.setDate(date.getDate() + 1);",
+                  "date.setHours(14, 30, 0, 0);",
+                  "pm.collectionVariables.set('appt_2_scheduled_at', date.toISOString());"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('appt_2_id', res[0].id);",
+                  "  pm.test('Appointment created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"patient_id\": \"{{patient_2_id}}\",\n  \"doctor_id\": \"{{user_doctor2_cg_id}}\",\n  \"department_id\": \"{{dept_cardiology_cg_id}}\",\n  \"scheduled_at\": \"{{appt_2_scheduled_at}}\",\n  \"duration_minutes\": 45,\n  \"status\": \"SCHEDULED\",\n  \"reason\": \"Chest pain evaluation\",\n  \"created_by\": \"{{user_receptionist_cg_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/appointments",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "appointments"]
+            }
+          }
+        },
+        {
+          "name": "Appointment 3 — CONFIRMED (day after tomorrow)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const date = new Date();",
+                  "date.setDate(date.getDate() + 2);",
+                  "date.setHours(10, 0, 0, 0);",
+                  "pm.collectionVariables.set('appt_3_scheduled_at', date.toISOString());"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('appt_3_id', res[0].id);",
+                  "  pm.test('Appointment created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"patient_id\": \"{{patient_3_id}}\",\n  \"doctor_id\": \"{{user_doctor1_cg_id}}\",\n  \"department_id\": \"{{dept_internal_med_cg_id}}\",\n  \"scheduled_at\": \"{{appt_3_scheduled_at}}\",\n  \"duration_minutes\": 30,\n  \"status\": \"CONFIRMED\",\n  \"reason\": \"Diabetes follow-up\",\n  \"created_by\": \"{{user_receptionist_cg_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/appointments",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "appointments"]
+            }
+          }
+        },
+        {
+          "name": "Appointment 4 — CONFIRMED (next week)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const date = new Date();",
+                  "date.setDate(date.getDate() + 5);",
+                  "date.setHours(11, 0, 0, 0);",
+                  "pm.collectionVariables.set('appt_4_scheduled_at', date.toISOString());"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('appt_4_id', res[0].id);",
+                  "  pm.test('Appointment created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"patient_id\": \"{{patient_4_id}}\",\n  \"doctor_id\": \"{{user_doctor2_cg_id}}\",\n  \"department_id\": \"{{dept_cardiology_cg_id}}\",\n  \"scheduled_at\": \"{{appt_4_scheduled_at}}\",\n  \"duration_minutes\": 60,\n  \"status\": \"CONFIRMED\",\n  \"reason\": \"Echocardiogram follow-up\",\n  \"created_by\": \"{{user_receptionist_cg_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/appointments",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "appointments"]
+            }
+          }
+        },
+        {
+          "name": "Appointment 5 — COMPLETED (yesterday)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const date = new Date();",
+                  "date.setDate(date.getDate() - 1);",
+                  "date.setHours(9, 0, 0, 0);",
+                  "pm.collectionVariables.set('appt_5_scheduled_at', date.toISOString());"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('appt_5_id', res[0].id);",
+                  "  pm.test('Appointment created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"patient_id\": \"{{patient_5_id}}\",\n  \"doctor_id\": \"{{user_doctor1_cg_id}}\",\n  \"department_id\": \"{{dept_internal_med_cg_id}}\",\n  \"scheduled_at\": \"{{appt_5_scheduled_at}}\",\n  \"duration_minutes\": 30,\n  \"status\": \"COMPLETED\",\n  \"reason\": \"Blood pressure monitoring\",\n  \"notes\": \"BP stable at 130/85. Continue current medication.\",\n  \"created_by\": \"{{user_receptionist_cg_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/appointments",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "appointments"]
+            }
+          }
+        },
+        {
+          "name": "Appointment 6 — COMPLETED (3 days ago)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const date = new Date();",
+                  "date.setDate(date.getDate() - 3);",
+                  "date.setHours(15, 0, 0, 0);",
+                  "pm.collectionVariables.set('appt_6_scheduled_at', date.toISOString());"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('appt_6_id', res[0].id);",
+                  "  pm.test('Appointment created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"patient_id\": \"{{patient_6_id}}\",\n  \"doctor_id\": \"{{user_doctor2_cg_id}}\",\n  \"department_id\": \"{{dept_cardiology_cg_id}}\",\n  \"scheduled_at\": \"{{appt_6_scheduled_at}}\",\n  \"duration_minutes\": 45,\n  \"status\": \"COMPLETED\",\n  \"reason\": \"Heart palpitations evaluation\",\n  \"notes\": \"ECG normal. Likely stress-related. Recommended lifestyle changes.\",\n  \"created_by\": \"{{user_receptionist_cg_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/appointments",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "appointments"]
+            }
+          }
+        },
+        {
+          "name": "Appointment 7 — CANCELLED",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const date = new Date();",
+                  "date.setDate(date.getDate() + 3);",
+                  "date.setHours(10, 30, 0, 0);",
+                  "pm.collectionVariables.set('appt_7_scheduled_at', date.toISOString());"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('appt_7_id', res[0].id);",
+                  "  pm.test('Appointment created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"patient_id\": \"{{patient_7_id}}\",\n  \"doctor_id\": \"{{user_doctor1_cg_id}}\",\n  \"department_id\": \"{{dept_internal_med_cg_id}}\",\n  \"scheduled_at\": \"{{appt_7_scheduled_at}}\",\n  \"duration_minutes\": 30,\n  \"status\": \"CANCELLED\",\n  \"reason\": \"Routine check-up\",\n  \"notes\": \"Patient cancelled — scheduling conflict\",\n  \"created_by\": \"{{user_receptionist_cg_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/appointments",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "appointments"]
+            }
+          }
+        },
+        {
+          "name": "Appointment 8 — NO_SHOW",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const date = new Date();",
+                  "date.setDate(date.getDate() - 2);",
+                  "date.setHours(13, 0, 0, 0);",
+                  "pm.collectionVariables.set('appt_8_scheduled_at', date.toISOString());"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('appt_8_id', res[0].id);",
+                  "  pm.test('Appointment created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"patient_id\": \"{{patient_8_id}}\",\n  \"doctor_id\": \"{{user_doctor2_cg_id}}\",\n  \"department_id\": \"{{dept_cardiology_cg_id}}\",\n  \"scheduled_at\": \"{{appt_8_scheduled_at}}\",\n  \"duration_minutes\": 30,\n  \"status\": \"NO_SHOW\",\n  \"reason\": \"Follow-up after ER visit\",\n  \"notes\": \"Patient did not appear. Left voicemail to reschedule.\",\n  \"created_by\": \"{{user_receptionist_cg_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/appointments",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "appointments"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Clinical — Admissions",
+      "item": [
+        {
+          "name": "Admission 1 — ADMITTED (Patient 3, Room 101)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('admission_1_id', res[0].id);",
+                  "  pm.test('Admission created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"patient_id\": \"{{patient_3_id}}\",\n  \"doctor_id\": \"{{user_doctor1_cg_id}}\",\n  \"department_id\": \"{{dept_internal_med_cg_id}}\",\n  \"room_id\": \"{{room_101_cg_id}}\",\n  \"status\": \"ADMITTED\",\n  \"reason\": \"Uncontrolled diabetes with complications\",\n  \"notes\": \"Blood sugar > 400. IV insulin started.\",\n  \"bed_number\": \"1A\",\n  \"created_by\": \"{{user_doctor1_cg_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/admissions",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "admissions"]
+            }
+          }
+        },
+        {
+          "name": "Mark Room 101 Unavailable",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Room updated', () => pm.response.to.have.status(200) || pm.response.to.have.status(204));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=minimal" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_available\": false\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/rooms?id=eq.{{room_101_cg_id}}",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "rooms"],
+              "query": [{ "key": "id", "value": "eq.{{room_101_cg_id}}" }]
+            }
+          }
+        },
+        {
+          "name": "Admission 2 — ADMITTED (Patient 5, ICU)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('admission_2_id', res[0].id);",
+                  "  pm.test('Admission created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"patient_id\": \"{{patient_5_id}}\",\n  \"doctor_id\": \"{{user_doctor2_cg_id}}\",\n  \"department_id\": \"{{dept_cardiology_cg_id}}\",\n  \"room_id\": \"{{room_301_cg_id}}\",\n  \"status\": \"ADMITTED\",\n  \"reason\": \"Acute myocardial infarction\",\n  \"notes\": \"Chest pain onset 2 hours ago. Troponin elevated. Cardiac catheterization scheduled.\",\n  \"bed_number\": \"ICU-1\",\n  \"created_by\": \"{{user_doctor2_cg_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/admissions",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "admissions"]
+            }
+          }
+        },
+        {
+          "name": "Mark Room 301 (ICU) Unavailable",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Room updated', () => pm.response.to.have.status(200) || pm.response.to.have.status(204));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=minimal" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_available\": false\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/rooms?id=eq.{{room_301_cg_id}}",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "rooms"],
+              "query": [{ "key": "id", "value": "eq.{{room_301_cg_id}}" }]
+            }
+          }
+        },
+        {
+          "name": "Admission 3 — DISCHARGED (Patient 1, was in Room 102)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const admitted = new Date();",
+                  "admitted.setDate(admitted.getDate() - 5);",
+                  "pm.collectionVariables.set('adm3_admitted_at', admitted.toISOString());",
+                  "const discharged = new Date();",
+                  "discharged.setDate(discharged.getDate() - 1);",
+                  "pm.collectionVariables.set('adm3_discharged_at', discharged.toISOString());"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('admission_3_id', res[0].id);",
+                  "  pm.test('Admission created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"patient_id\": \"{{patient_1_id}}\",\n  \"doctor_id\": \"{{user_doctor1_cg_id}}\",\n  \"department_id\": \"{{dept_internal_med_cg_id}}\",\n  \"room_id\": \"{{room_102_cg_id}}\",\n  \"admitted_at\": \"{{adm3_admitted_at}}\",\n  \"discharged_at\": \"{{adm3_discharged_at}}\",\n  \"status\": \"DISCHARGED\",\n  \"reason\": \"Pneumonia — community acquired\",\n  \"notes\": \"Completed IV antibiotics course. Discharged with oral antibiotics for 5 more days.\",\n  \"bed_number\": \"102\",\n  \"created_by\": \"{{user_doctor1_cg_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/admissions",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "admissions"]
+            }
+          }
+        },
+        {
+          "name": "Admission RV-1 — ADMITTED (Aiden Cooper, Riverside)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res && res[0]) {",
+                  "  pm.collectionVariables.set('admission_rv_1_id', res[0].id);",
+                  "  pm.test('Admission created', () => pm.response.to.have.status(201));",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_riverside_id}}\",\n  \"patient_id\": \"{{patient_rv_1_id}}\",\n  \"doctor_id\": \"{{user_doctor_rv_id}}\",\n  \"department_id\": \"{{dept_pediatrics_rv_id}}\",\n  \"room_id\": \"{{room_101_rv_id}}\",\n  \"status\": \"ADMITTED\",\n  \"reason\": \"Severe dehydration from viral gastroenteritis\",\n  \"notes\": \"IV fluids started. Monitoring electrolytes.\",\n  \"bed_number\": \"P-1\",\n  \"created_by\": \"{{user_doctor_rv_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/admissions",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "admissions"]
+            }
+          }
+        },
+        {
+          "name": "Mark Room 101 (Riverside) Unavailable",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Room updated', () => pm.response.to.have.status(200) || pm.response.to.have.status(204));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=minimal" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_available\": false\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/rooms?id=eq.{{room_101_rv_id}}",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "rooms"],
+              "query": [{ "key": "id", "value": "eq.{{room_101_rv_id}}" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Clinical — Medical Records",
+      "item": [
+        {
+          "name": "Record 1 — DRAFT (Patient 3, diabetes)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Record created', () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"patient_id\": \"{{patient_3_id}}\",\n  \"author_id\": \"{{user_doctor1_cg_id}}\",\n  \"admission_id\": \"{{admission_1_id}}\",\n  \"chief_complaint\": \"Uncontrolled blood sugar, fatigue, blurred vision\",\n  \"notes\": \"Patient admitted with blood glucose > 400 mg/dL. Started IV insulin drip. Awaiting HbA1c results. Will adjust oral medications upon stabilization.\",\n  \"status\": \"DRAFT\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/medical_records",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "medical_records"]
+            }
+          }
+        },
+        {
+          "name": "Record 2 — DRAFT (Patient 5, cardiac)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Record created', () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"patient_id\": \"{{patient_5_id}}\",\n  \"author_id\": \"{{user_doctor2_cg_id}}\",\n  \"admission_id\": \"{{admission_2_id}}\",\n  \"chief_complaint\": \"Severe chest pain radiating to left arm\",\n  \"notes\": \"Troponin I elevated at 2.5 ng/mL. ECG shows ST elevation in leads V1-V4. STEMI protocol activated. Cardiac catheterization performed — stent placed in LAD.\",\n  \"status\": \"DRAFT\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/medical_records",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "medical_records"]
+            }
+          }
+        },
+        {
+          "name": "Record 3 — DRAFT (Patient 6, palpitations)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Record created', () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"patient_id\": \"{{patient_6_id}}\",\n  \"author_id\": \"{{user_doctor2_cg_id}}\",\n  \"appointment_id\": \"{{appt_6_id}}\",\n  \"chief_complaint\": \"Heart palpitations, anxiety\",\n  \"notes\": \"24-year-old female presenting with intermittent palpitations over 2 weeks. ECG normal sinus rhythm. No structural abnormalities on echo. Likely anxiety-related. Recommended stress management and follow-up in 4 weeks.\",\n  \"status\": \"DRAFT\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/medical_records",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "medical_records"]
+            }
+          }
+        },
+        {
+          "name": "Record 4 — FINALIZED (Patient 1, pneumonia discharge)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const now = new Date();",
+                  "now.setDate(now.getDate() - 1);",
+                  "pm.collectionVariables.set('record4_finalized_at', now.toISOString());",
+                  "const visit = new Date();",
+                  "visit.setDate(visit.getDate() - 5);",
+                  "pm.collectionVariables.set('record4_visit_date', visit.toISOString().split('T')[0]);"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Record created', () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"patient_id\": \"{{patient_1_id}}\",\n  \"author_id\": \"{{user_doctor1_cg_id}}\",\n  \"admission_id\": \"{{admission_3_id}}\",\n  \"visit_date\": \"{{record4_visit_date}}\",\n  \"chief_complaint\": \"Productive cough, fever 39.2C, shortness of breath\",\n  \"notes\": \"Chest X-ray confirmed right lower lobe pneumonia. Completed 5-day IV ceftriaxone + azithromycin. Fever resolved day 3. O2 saturation stable at 97% on room air. Discharged with oral amoxicillin-clavulanate 875mg BID x 5 days. Follow-up in 2 weeks.\",\n  \"status\": \"FINALIZED\",\n  \"finalized_by\": \"{{user_doctor1_cg_id}}\",\n  \"finalized_at\": \"{{record4_finalized_at}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/medical_records",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "medical_records"]
+            }
+          }
+        },
+        {
+          "name": "Record 5 — FINALIZED (Patient 2, blood pressure check)",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const now = new Date();",
+                  "now.setDate(now.getDate() - 3);",
+                  "pm.collectionVariables.set('record5_finalized_at', now.toISOString());",
+                  "pm.collectionVariables.set('record5_visit_date', now.toISOString().split('T')[0]);"
+                ],
+                "type": "text/javascript"
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Record created', () => pm.response.to.have.status(201));"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{service_role_key}}" },
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Prefer", "value": "return=representation" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"hospital_id\": \"{{hospital_city_general_id}}\",\n  \"patient_id\": \"{{patient_2_id}}\",\n  \"author_id\": \"{{user_doctor1_cg_id}}\",\n  \"visit_date\": \"{{record5_visit_date}}\",\n  \"chief_complaint\": \"Routine hypertension follow-up\",\n  \"notes\": \"BP 128/82 (improved from 145/95). Lisinopril 10mg continued. Patient reports good medication adherence. Low-sodium diet discussed. Next follow-up in 3 months.\",\n  \"status\": \"FINALIZED\",\n  \"finalized_by\": \"{{user_doctor1_cg_id}}\",\n  \"finalized_at\": \"{{record5_finalized_at}}\"\n}"
+            },
+            "url": {
+              "raw": "{{supabase_url}}/rest/v1/medical_records",
+              "host": ["{{supabase_url}}"],
+              "path": ["rest", "v1", "medical_records"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
