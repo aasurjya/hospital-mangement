@@ -1,26 +1,380 @@
 @import "tailwindcss";
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
+  color-scheme: light;
   --background: #ffffff;
   --foreground: #171717;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+/* Dark mode tokens — drafted for future use, not active until components
+   replace bg-white with bg-surface and add dark: variants.
 @media (prefers-color-scheme: dark) {
   :root {
+    color-scheme: dark;
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+} */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-display);
+
+  /* ─── Primary (blue) ─── */
+  --color-primary-50: var(--color-blue-50);
+  --color-primary-100: var(--color-blue-100);
+  --color-primary-200: var(--color-blue-200);
+  --color-primary-300: var(--color-blue-300);
+  --color-primary-400: var(--color-blue-400);
+  --color-primary-500: var(--color-blue-500);
+  --color-primary-600: var(--color-blue-600);
+  --color-primary-700: var(--color-blue-700);
+  --color-primary-800: var(--color-blue-800);
+  --color-primary-900: var(--color-blue-900);
+  --color-primary-950: var(--color-blue-950);
+
+  /* ─── Secondary (indigo) ─── */
+  --color-secondary-50: var(--color-indigo-50);
+  --color-secondary-100: var(--color-indigo-100);
+  --color-secondary-200: var(--color-indigo-200);
+  --color-secondary-300: var(--color-indigo-300);
+  --color-secondary-400: var(--color-indigo-400);
+  --color-secondary-500: var(--color-indigo-500);
+  --color-secondary-600: var(--color-indigo-600);
+  --color-secondary-700: var(--color-indigo-700);
+  --color-secondary-800: var(--color-indigo-800);
+  --color-secondary-900: var(--color-indigo-900);
+  --color-secondary-950: var(--color-indigo-950);
+
+  /* ─── Success (green) ─── */
+  --color-success-50: var(--color-green-50);
+  --color-success-100: var(--color-green-100);
+  --color-success-200: var(--color-green-200);
+  --color-success-300: var(--color-green-300);
+  --color-success-400: var(--color-green-400);
+  --color-success-500: var(--color-green-500);
+  --color-success-600: var(--color-green-600);
+  --color-success-700: var(--color-green-700);
+  --color-success-800: var(--color-green-800);
+  --color-success-900: var(--color-green-900);
+  --color-success-950: var(--color-green-950);
+
+  /* ─── Warning (amber) ─── */
+  --color-warning-50: var(--color-amber-50);
+  --color-warning-100: var(--color-amber-100);
+  --color-warning-200: var(--color-amber-200);
+  --color-warning-300: var(--color-amber-300);
+  --color-warning-400: var(--color-amber-400);
+  --color-warning-500: var(--color-amber-500);
+  --color-warning-600: var(--color-amber-600);
+  --color-warning-700: var(--color-amber-700);
+  --color-warning-800: var(--color-amber-800);
+  --color-warning-900: var(--color-amber-900);
+  --color-warning-950: var(--color-amber-950);
+
+  /* ─── Error (red) ─── */
+  --color-error-50: var(--color-red-50);
+  --color-error-100: var(--color-red-100);
+  --color-error-200: var(--color-red-200);
+  --color-error-300: var(--color-red-300);
+  --color-error-400: var(--color-red-400);
+  --color-error-500: var(--color-red-500);
+  --color-error-600: var(--color-red-600);
+  --color-error-700: var(--color-red-700);
+  --color-error-800: var(--color-red-800);
+  --color-error-900: var(--color-red-900);
+  --color-error-950: var(--color-red-950);
+
+  /* ─── Neutral (gray) ─── */
+  --color-neutral-50: var(--color-gray-50);
+  --color-neutral-100: var(--color-gray-100);
+  --color-neutral-200: var(--color-gray-200);
+  --color-neutral-300: var(--color-gray-300);
+  --color-neutral-400: var(--color-gray-400);
+  --color-neutral-500: var(--color-gray-500);
+  --color-neutral-600: var(--color-gray-600);
+  --color-neutral-700: var(--color-gray-700);
+  --color-neutral-800: var(--color-gray-800);
+  --color-neutral-900: var(--color-gray-900);
+  --color-neutral-950: var(--color-gray-950);
+
+  /* ─── Caution (yellow) ─── */
+  --color-caution-50: var(--color-yellow-50);
+  --color-caution-100: var(--color-yellow-100);
+  --color-caution-200: var(--color-yellow-200);
+  --color-caution-300: var(--color-yellow-300);
+  --color-caution-400: var(--color-yellow-400);
+  --color-caution-500: var(--color-yellow-500);
+  --color-caution-600: var(--color-yellow-600);
+  --color-caution-700: var(--color-yellow-700);
+  --color-caution-800: var(--color-yellow-800);
+  --color-caution-900: var(--color-yellow-900);
+  --color-caution-950: var(--color-yellow-950);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Ensure form controls always have visible dark text on white backgrounds */
+input,
+select,
+textarea {
+  color: var(--foreground);
+}
+
+/* Global focus-visible ring for keyboard accessibility */
+*:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* Offset anchor scroll targets for the fixed 64px header */
+#features,
+#ai,
+#how-it-works,
+#contact {
+  scroll-margin-top: 5rem;
+}
+
+/* ─── Scroll Reveal Animations ─── */
+.scroll-reveal {
+  will-change: opacity, transform;
+}
+
+.scroll-reveal--fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+}
+.scroll-reveal--fade-in {
+  opacity: 0;
+}
+.scroll-reveal--slide-left {
+  opacity: 0;
+  transform: translateX(-32px);
+}
+.scroll-reveal--slide-right {
+  opacity: 0;
+  transform: translateX(32px);
+}
+.scroll-reveal--scale-up {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.scroll-reveal.scroll-revealed {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─── Word-reveal clip animation ─── */
+.word-reveal-wrap {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.08em;
+}
+
+.word-reveal {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(105%);
+  animation: word-slide-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes word-slide-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Grain texture overlay ─── */
+.hero-grain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Hero dark mesh gradient ─── */
+.hero-mesh {
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 0%, #0D2545 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 10%, #0F3460 0%, transparent 55%),
+    radial-gradient(ellipse 50% 70% at 50% 80%, #0C2340 0%, transparent 65%),
+    radial-gradient(ellipse 30% 30% at 15% 85%, rgba(13, 148, 136, 0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 25% 25% at 85% 20%, rgba(139, 92, 246, 0.12) 0%, transparent 70%),
+    linear-gradient(160deg, #0C1628 0%, #070B14 100%);
+}
+
+/* ─── Aurora animated blobs ─── */
+@keyframes aurora {
+  0% { transform: rotate(0deg) scale(1); }
+  33% { transform: rotate(1deg) scale(1.05); }
+  66% { transform: rotate(-1deg) scale(0.98); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+.hero-aurora::after {
+  content: '';
+  position: absolute;
+  bottom: -40%;
+  right: -20%;
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(13, 148, 136, 0.15), transparent 70%);
+  filter: blur(60px);
+  animation: aurora 8s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+/* ─── Shimmer text effect ─── */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.text-shimmer {
+  background: linear-gradient(91deg, #5EEAD4 16%, #A78BFA 36%, #2DD4BF 56%, #8B5CF6 76%, #5EEAD4 96%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+/* ─── CTA gradient button ─── */
+.btn-cta {
+  background: linear-gradient(135deg, #14B8A6 0%, #0D9488 50%, #0F766E 100%);
+  box-shadow: 0 4px 16px rgba(13, 148, 136, 0.35), 0 8px 32px rgba(13, 148, 136, 0.20);
+  transition: box-shadow 0.25s ease, transform 0.15s ease;
+}
+.btn-cta:hover {
+  background: linear-gradient(135deg, #2DD4BF 0%, #14B8A6 50%, #0D9488 100%);
+  box-shadow: 0 6px 24px rgba(13, 148, 136, 0.45), 0 12px 48px rgba(13, 148, 136, 0.25);
+  transform: translateY(-1px);
+}
+.btn-cta:active {
+  transform: scale(0.975);
+  box-shadow: none;
+}
+
+/* ─── Gradient text utility ─── */
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-neutral-900) 0%, var(--color-primary-600) 60%, var(--color-secondary-500) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* ─── Testimonial quote mark ─── */
+.quote-mark {
+  font-family: var(--font-display);
+  font-size: 5rem;
+  line-height: 1;
+  color: var(--color-neutral-100);
+  user-select: none;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s ease;
+  display: block;
+  margin-bottom: -1.5rem;
+}
+.group:hover .quote-mark {
+  transform: scale(1.15) rotate(-4deg);
+  color: var(--color-primary-100);
+}
+
+/* ─── Hero staggered entrance ─── */
+.hero-animate {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: hero-entrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hero-animate:nth-child(1) { animation-delay: 0.1s; }
+.hero-animate:nth-child(2) { animation-delay: 0.25s; }
+.hero-animate:nth-child(3) { animation-delay: 0.4s; }
+.hero-animate:nth-child(4) { animation-delay: 0.55s; }
+.hero-animate:nth-child(5) { animation-delay: 0.7s; }
+
+@keyframes hero-entrance {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ─── Scrollbar styling for dashboard preview ─── */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-neutral-300) transparent;
+}
+.scrollbar-thin::-webkit-scrollbar {
+  height: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--color-neutral-300);
+  border-radius: 3px;
+}
+
+/* ─── Contact success entrance ─── */
+.success-enter {
+  animation: success-pop 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes success-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ─── Dashboard tab transitions (directional) ─── */
+@keyframes tab-enter-forward {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes tab-enter-back {
+  from { opacity: 0; transform: translateX(-16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.animate-tab-enter-forward {
+  animation: tab-enter-forward 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.animate-tab-enter-back {
+  animation: tab-enter-back 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal,
+  .hero-animate,
+  .word-reveal,
+  .animate-tab-enter-forward,
+  .animate-tab-enter-back {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
 }
