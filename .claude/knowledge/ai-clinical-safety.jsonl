@@ -1,0 +1,7 @@
+{"fact":"AI in this project is clinician-assistive only. It must not act as an autonomous diagnosis, prescribing, discharge, or emergency-triage engine.","type":"must_follow","tags":["ai","clinical_safety","doctor_assist"],"confidence":"high"}
+{"fact":"Symptom-analysis features must use deterministic red-flag rules plus retrieved medical guidance, not pure free-form LLM output.","type":"must_follow","tags":["ai","symptoms","guardrails","retrieval"],"confidence":"high"}
+{"fact":"Every AI output must be reviewable, editable, rejectable, and auditable by the clinician.","type":"must_follow","tags":["ai","audit","human_in_the_loop"],"confidence":"high"}
+{"fact":"AI requests must run server-side only and use the minimum necessary patient data.","type":"security","tags":["ai","server","privacy","phi"],"confidence":"high"}
+{"fact":"Track model version, prompt version, retrieval sources, input snapshot, output snapshot, and clinician accept-edit-reject outcomes for AI interactions.","type":"pattern","tags":["ai","audit","traceability","observability"],"confidence":"high"}
+{"fact":"Do not ship a public patient-facing symptom checker in v1. First validate clinician-assistive workflows with staged evaluation.","type":"decision","tags":["ai","scope","patient","rollout"],"confidence":"high"}
+{"fact":"Offline evaluation, clinician review, silent mode, and limited pilot rollout should happen before broad AI deployment.","type":"pattern","tags":["ai","evaluation","rollout","clinical_safety"],"confidence":"high"}

@@ -1,0 +1,1 @@
+{"fact":"Legacy compatibility file only. Ignore Flutter-specific guidance in this repository and use `.claude/knowledge/web-patterns.jsonl`, `.claude/knowledge/hospital-platform-decisions.jsonl`, and `md/ai-context.md` instead.","type":"decision","tags":["legacy","deprecated","flutter"],"confidence":"high"}

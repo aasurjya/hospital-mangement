@@ -1,0 +1,1 @@
+{"fact":"Legacy compatibility file only. Ignore school-management decisions in this repository and use `.claude/knowledge/hospital-platform-decisions.jsonl`, `.claude/knowledge/project-context.md`, and `md/ai-context.md` instead.","type":"decision","tags":["legacy","deprecated","school_management"],"confidence":"high"}

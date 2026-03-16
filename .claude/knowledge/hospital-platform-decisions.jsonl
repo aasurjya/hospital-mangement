@@ -1,0 +1,8 @@
+{"fact":"This product is a multi-tenant hospital management platform. Platform admin has full cross-hospital visibility and control.","type":"decision","tags":["multitenancy","platform_admin","scope"],"confidence":"high"}
+{"fact":"Each hospital has its own hospital admin and staff users. Hospital admins manage only their assigned hospital.","type":"decision","tags":["hospital_admin","rbac","scope"],"confidence":"high"}
+{"fact":"The web stack is Next.js with TypeScript and Supabase Postgres for local-first development and hosted deployment later.","type":"decision","tags":["nextjs","typescript","supabase","stack"],"confidence":"high"}
+{"fact":"Authentication is email and password based. Platform admin email is configured in environment variables.","type":"decision","tags":["auth","email","env"],"confidence":"high"}
+{"fact":"Passwords must be hashed for storage. Newly issued or reset passwords may be displayed once to an authorized admin but must never be retrievable later.","type":"decision","tags":["passwords","security","auth"],"confidence":"high"}
+{"fact":"Internal communication uses socket-based chat with document sharing for office work.","type":"decision","tags":["chat","socket","documents","communication"],"confidence":"high"}
+{"fact":"Core role set currently includes PLATFORM_ADMIN, HOSPITAL_ADMIN, DOCTOR, NURSE, RECEPTIONIST, LAB_TECHNICIAN, PHARMACIST, BILLING_STAFF, ACCOUNTANT, HR_MANAGER, OPERATIONS_MANAGER, and PATIENT.","type":"decision","tags":["roles","rbac","hospital"],"confidence":"high"}
+{"fact":"Audit logs are required for user creation, password resets, and role changes.","type":"decision","tags":["audit","security","admin"],"confidence":"high"}
