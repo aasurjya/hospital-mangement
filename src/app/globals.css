@@ -8,6 +8,13 @@ html {
   color-scheme: light;
   --background: #ffffff;
   --foreground: #171717;
+
+  /* ─── Editorial design tokens (landing page) ─── */
+  --cream:   #F9F8F5;   /* warm off-white — main landing bg */
+  --ink:     #131313;   /* near-black text */
+  --sage:    #96C4C8;   /* sage teal accent */
+  --sand:    #D9D3C9;   /* warm mid-tone border/divider */
+  --cream-2: #F0EDE6;   /* slightly darker cream for alternate sections */
 }
 
 /* Dark mode tokens — drafted for future use, not active until components
@@ -199,6 +206,55 @@ textarea {
   }
 }
 
+/* ─── Editorial landing page styles ─── */
+
+/* Clip-reveal: text slides up from behind an overflow:hidden mask */
+.clip-reveal-wrap {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-block: 0.08em;
+  margin-block: -0.08em;
+}
+.clip-reveal {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(110%);
+  animation: clip-reveal-up 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes clip-reveal-up {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Fade-in with upward drift */
+.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fade-up-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes fade-up-in {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Subtle line draw for horizontal rules */
+.line-draw {
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: line-draw 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+}
+@keyframes line-draw {
+  to { transform: scaleX(1); }
+}
+
+/* Section label style — small uppercase tracking */
+.section-label {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--sand);
+}
+
 /* ─── Grain texture overlay ─── */
 .hero-grain::before {
   content: '';
@@ -370,6 +426,9 @@ textarea {
   .scroll-reveal,
   .hero-animate,
   .word-reveal,
+  .clip-reveal,
+  .fade-up,
+  .line-draw,
   .animate-tab-enter-forward,
   .animate-tab-enter-back {
     opacity: 1 !important;

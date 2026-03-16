@@ -10,7 +10,7 @@ const FAQS = [
       'Most hospitals go live within 48 hours. Our team handles the full setup — creating your hospital account, configuring departments, roles, and rooms. Your staff just logs in.',
   },
   {
-    question: 'Do you sign a Business Associate Agreement (BAA)?',
+    question: 'Do you sign a Business Associate Agreement?',
     answer:
       'Yes. We sign BAAs with every hospital before any patient data enters the system. Our legal team can turn this around within 24 hours of your request.',
   },
@@ -40,32 +40,44 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="border-b border-neutral-200">
+    <div className="border-b" style={{ borderColor: 'var(--sand)' }}>
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
-        className="flex w-full items-center justify-between py-5 text-left"
+        className="flex w-full items-center justify-between gap-8 py-7 text-left"
         aria-expanded={open}
       >
-        <span className="text-base font-semibold text-neutral-900">{question}</span>
+        <span
+          className="text-sm font-medium uppercase tracking-[0.06em]"
+          style={{ color: 'var(--ink)' }}
+        >
+          {question}
+        </span>
         <svg
-          className={`h-5 w-5 shrink-0 text-neutral-400 transition-transform duration-200 ${
-            open ? 'rotate-180' : ''
-          }`}
+          className="h-4 w-4 shrink-0 transition-transform duration-300"
+          style={{
+            transform: open ? 'rotate(45deg)' : 'rotate(0deg)',
+            color: open ? 'var(--sage)' : 'var(--sand)',
+          }}
           fill="none"
           viewBox="0 0 24 24"
-          strokeWidth={2}
+          strokeWidth={1.5}
           stroke="currentColor"
           aria-hidden="true"
         >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
         </svg>
       </button>
       <div
-        className="overflow-hidden transition-all duration-200 ease-out"
+        className="overflow-hidden transition-all duration-300 ease-out"
         style={{ maxHeight: open ? '200px' : '0', opacity: open ? 1 : 0 }}
       >
-        <p className="pb-5 text-sm leading-relaxed text-neutral-600">{answer}</p>
+        <p
+          className="pb-7 text-xs font-medium leading-relaxed tracking-[0.06em] uppercase"
+          style={{ color: 'var(--sand)' }}
+        >
+          {answer}
+        </p>
       </div>
     </div>
   )
@@ -73,26 +85,49 @@ function FaqItem({ question, answer }: { question: string; answer: string }) {
 
 export function FaqSection() {
   return (
-    <section className="bg-white py-24 lg:py-32">
-      <div className="mx-auto max-w-3xl px-4 lg:px-8">
-        <ScrollReveal animation="fade-up">
-          <div className="text-center">
-            <p className="text-sm font-semibold uppercase tracking-widest text-neutral-400">
-              Common questions
-            </p>
-            <h2 className="mt-2 text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
-              Frequently asked questions
-            </h2>
-          </div>
-        </ScrollReveal>
+    <section
+      className="px-6 py-24 lg:px-12 lg:py-36"
+      style={{ backgroundColor: 'var(--cream-2)', borderTop: '1px solid var(--sand)', color: 'var(--ink)' }}
+    >
+      <div className="mx-auto max-w-[1400px]">
+        <div className="grid gap-16 lg:grid-cols-[1fr_2fr] lg:gap-24">
+          {/* Left: heading */}
+          <ScrollReveal animation="fade-up">
+            <div>
+              <p className="section-label mb-3">Common questions</p>
+              <h2
+                className="font-sans font-medium uppercase leading-[0.95] tracking-tight"
+                style={{ fontSize: 'clamp(2rem, 3.5vw, 4rem)', color: 'var(--ink)' }}
+              >
+                Frequently<br />
+                <span className="font-display italic font-light">asked.</span>
+              </h2>
+              <p
+                className="mt-8 text-xs font-medium leading-relaxed tracking-[0.08em] uppercase"
+                style={{ color: 'var(--sand)' }}
+              >
+                Can&rsquo;t find the answer?{' '}
+                <a
+                  href="#contact"
+                  className="transition-opacity hover:opacity-60"
+                  style={{ color: 'var(--ink)', textDecoration: 'underline', textUnderlineOffset: '3px' }}
+                >
+                  Contact us directly.
+                </a>
+              </p>
+            </div>
+          </ScrollReveal>
 
-        <ScrollReveal animation="fade-up" delay={100}>
-          <div className="mt-12 divide-y divide-neutral-200 border-t border-neutral-200">
-            {FAQS.map((faq) => (
-              <FaqItem key={faq.question} question={faq.question} answer={faq.answer} />
-            ))}
-          </div>
-        </ScrollReveal>
+          {/* Right: accordion */}
+          <ScrollReveal animation="fade-up" delay={100}>
+            <div>
+              <div className="h-px" style={{ backgroundColor: 'var(--sand)' }} />
+              {FAQS.map((faq) => (
+                <FaqItem key={faq.question} question={faq.question} answer={faq.answer} />
+              ))}
+            </div>
+          </ScrollReveal>
+        </div>
       </div>
     </section>
   )

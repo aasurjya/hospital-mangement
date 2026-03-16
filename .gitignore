@@ -62,6 +62,10 @@ supabase/.temp
 .vscode/settings.json
 .vscode/launch.json
 
+# Claude Code (local memory, MCP config)
+.claude/
+.mcp.json
+
 # logs
 /logs
 *.log

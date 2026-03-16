@@ -29,7 +29,7 @@ export default async function RootPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--cream)' }}>
       <LandingHeader />
       <main id="main-content">
         <HeroSection />

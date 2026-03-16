@@ -39,45 +39,48 @@ import { ScrollReveal } from './scroll-reveal'
 
 export function HowItWorksSection() {
   return (
-    <section id="how-it-works" className="bg-white py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-4 lg:px-8">
-        {/* Section header */}
+    <section
+      id="how-it-works"
+      className="px-6 py-24 lg:px-12 lg:py-36"
+      style={{ backgroundColor: 'var(--cream-2)', borderTop: '1px solid var(--sand)', color: 'var(--ink)' }}
+    >
+      <div className="mx-auto max-w-[1400px]">
         <ScrollReveal animation="fade-up">
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-widest text-neutral-400">
-            Live in 48 hours
-          </p>
-          <h2 className="mt-2 text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
-            Getting started is simple
-          </h2>
-          <p className="mt-4 text-lg leading-relaxed text-neutral-600">
-            Most hospitals go live within 48 hours.
-          </p>
-        </div>
+          <div className="mb-16">
+            <p className="section-label mb-3">Live in 48 hours</p>
+            <h2
+              className="font-sans font-medium uppercase leading-[0.95] tracking-tight"
+              style={{ fontSize: 'clamp(2.5rem, 5vw, 5.5rem)', color: 'var(--ink)' }}
+            >
+              Getting started<br />
+              <span className="font-display italic font-light" style={{ fontSize: '0.9em' }}>is simple</span>
+            </h2>
+          </div>
         </ScrollReveal>
 
-        {/* Steps */}
-        <div className="mt-16 grid gap-8 lg:grid-cols-3">
-          {STEPS.map((item, index) => (
-            <ScrollReveal key={item.step} animation="fade-up" delay={index * 150}>
-            <div className="relative text-center">
-              {/* Connector line (desktop) */}
-              {index < STEPS.length - 1 && (
-                <div
-                  className="absolute right-0 top-12 hidden h-px w-full translate-x-1/2 bg-gradient-to-r from-neutral-300 to-transparent lg:block"
-                  aria-hidden="true"
-                />
-              )}
-
-              <div className="relative mx-auto mb-6 inline-flex h-24 w-24 items-center justify-center rounded-2xl border border-neutral-200 bg-white text-neutral-700">
-                {item.icon}
-                <span className="absolute -top-2 -right-2 flex h-7 w-7 items-center justify-center rounded-full bg-primary-600 text-xs font-bold text-white">
+        <div className="grid gap-0 lg:grid-cols-3">
+          {STEPS.map((item, i) => (
+            <ScrollReveal key={item.step} animation="fade-up" delay={i * 100}>
+              <div
+                className="flex flex-col gap-6 border-b py-10 lg:border-b-0 lg:border-r lg:px-8 lg:py-0 first:lg:pl-0 last:lg:border-r-0"
+                style={{ borderColor: 'var(--sand)' }}
+              >
+                <span className="text-xs font-medium tracking-[0.1em]" style={{ color: 'var(--sand)' }}>
                   {item.step}
                 </span>
+                <h3
+                  className="font-sans text-lg font-medium uppercase tracking-[0.06em]"
+                  style={{ color: 'var(--ink)' }}
+                >
+                  {item.title}
+                </h3>
+                <p
+                  className="text-xs font-medium leading-relaxed tracking-[0.06em] uppercase"
+                  style={{ color: 'var(--sand)' }}
+                >
+                  {item.description}
+                </p>
               </div>
-              <h3 className="text-xl font-semibold text-neutral-900">{item.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-neutral-600">{item.description}</p>
-            </div>
             </ScrollReveal>
           ))}
         </div>

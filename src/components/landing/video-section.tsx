@@ -7,7 +7,6 @@ export function VideoSection() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
 
-  // Play video when section enters viewport, pause when it leaves
   useEffect(() => {
     const video = videoRef.current
     const section = sectionRef.current
@@ -29,21 +28,39 @@ export function VideoSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="relative bg-neutral-950 py-20 lg:py-28">
-      <div className="mx-auto max-w-7xl px-4 lg:px-8">
+    <section
+      ref={sectionRef}
+      className="px-6 py-24 lg:px-12 lg:py-36"
+      style={{ backgroundColor: 'var(--ink)', color: 'var(--cream)' }}
+    >
+      <div className="mx-auto max-w-[1400px]">
         <ScrollReveal animation="fade-up">
-          <div className="mx-auto mb-12 max-w-xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-widest text-teal-400/60">
-              See it in action
+          <div className="mb-16 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="section-label mb-3" style={{ color: 'rgba(249,248,245,0.4)' }}>See it in action</p>
+              <h2
+                className="font-sans font-medium uppercase leading-[0.95] tracking-tight"
+                style={{ fontSize: 'clamp(2.5rem, 5vw, 5.5rem)', color: 'var(--cream)' }}
+              >
+                Watch it<br />
+                <span className="font-display italic font-light" style={{ fontSize: '0.9em', color: 'var(--sage)' }}>work.</span>
+              </h2>
+            </div>
+            <p
+              className="max-w-[28ch] text-xs font-medium leading-relaxed tracking-[0.08em] uppercase sm:text-right"
+              style={{ color: 'rgba(249,248,245,0.4)' }}
+            >
+              See how HospitalOS transforms patient intake, scheduling, and clinical workflows in a single platform.
             </p>
-            <h2 className="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">
-              How HospitalOS transforms your hospital
-            </h2>
           </div>
         </ScrollReveal>
 
-        <ScrollReveal animation="scale-up" delay={100}>
-          <div className="relative mx-auto max-w-5xl overflow-hidden rounded-2xl border border-white/10 shadow-[0_0_0_1px_rgba(255,255,255,0.04),0_8px_40px_rgba(0,0,0,0.5),0_24px_80px_rgba(0,0,0,0.4)]">
+        <ScrollReveal animation="fade-up" delay={100}>
+          <div
+            className="relative mx-auto overflow-hidden"
+            style={{ borderRadius: '4px', border: '1px solid rgba(249,248,245,0.08)' }}
+            aria-label="HospitalOS product demo video"
+          >
             <video
               ref={videoRef}
               className="aspect-video w-full"

@@ -7,7 +7,6 @@ const TESTIMONIALS = [
     author: 'Dr. Priya Sharma',
     role: 'Chief Medical Officer',
     hospital: 'Metro General Hospital',
-    initials: 'PS',
   },
   {
     quote:
@@ -15,7 +14,6 @@ const TESTIMONIALS = [
     author: 'James Okonkwo',
     role: 'Hospital Administrator',
     hospital: 'Sunrise Community Health',
-    initials: 'JO',
   },
   {
     quote:
@@ -23,48 +21,67 @@ const TESTIMONIALS = [
     author: 'Sarah Chen',
     role: 'Director of IT & Compliance',
     hospital: 'Pacific Coast Medical Center',
-    initials: 'SC',
   },
 ] as const
 
 export function TestimonialsSection() {
   return (
-    <section className="bg-white py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-4 lg:px-8">
+    <section
+      className="px-6 py-24 lg:px-12 lg:py-36"
+      style={{ backgroundColor: 'var(--cream)', borderTop: '1px solid var(--sand)', color: 'var(--ink)' }}
+    >
+      <div className="mx-auto max-w-[1400px]">
         <ScrollReveal animation="fade-up">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-widest text-neutral-400">
-              Trusted by hospitals
-            </p>
-            <h2 className="mt-2 text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
-              What our clients say
+          <div className="mb-16">
+            <p className="section-label mb-3">Trusted by hospitals</p>
+            <h2
+              className="font-sans font-medium uppercase leading-[0.95] tracking-tight"
+              style={{ fontSize: 'clamp(2.5rem, 5vw, 5.5rem)', color: 'var(--ink)' }}
+            >
+              What our<br />
+              <span className="font-display italic font-light" style={{ fontSize: '0.9em' }}>clients say</span>
             </h2>
           </div>
         </ScrollReveal>
 
-        <div className="mt-16 grid gap-8 lg:grid-cols-3">
-          {TESTIMONIALS.map((t, index) => (
-            <ScrollReveal key={t.author} animation="fade-up" delay={index * 100}>
-              <div className="group flex h-full flex-col rounded-xl border border-neutral-200 bg-white p-6 transition-shadow duration-300 hover:shadow-md">
-                {/* Quote mark */}
-                <span className="quote-mark" aria-hidden="true">&ldquo;</span>
+        <div className="h-px" style={{ backgroundColor: 'var(--sand)' }} />
 
-                {/* Quote */}
-                <blockquote className="flex-1 text-sm leading-relaxed text-neutral-700">
-                  &ldquo;{t.quote}&rdquo;
+        <div className="grid gap-0 lg:grid-cols-3">
+          {TESTIMONIALS.map((t, i) => (
+            <ScrollReveal key={t.author} animation="fade-up" delay={i * 100}>
+              <div
+                className="flex flex-col gap-8 border-b py-12 lg:border-b-0 lg:border-r lg:px-8 lg:py-10 first:lg:pl-0 last:lg:border-r-0"
+                style={{ borderColor: 'var(--sand)' }}
+              >
+                {/* Large decorative quote mark */}
+                <span
+                  className="font-display leading-none select-none"
+                  style={{ fontSize: '5rem', lineHeight: 1, color: 'var(--sand)', fontStyle: 'italic' }}
+                  aria-hidden="true"
+                >
+                  &ldquo;
+                </span>
+
+                <blockquote
+                  className="flex-1 font-display italic font-light leading-relaxed"
+                  style={{ fontSize: 'clamp(1rem, 1.5vw, 1.25rem)', color: 'var(--ink)' }}
+                >
+                  {t.quote}
                 </blockquote>
 
-                {/* Author */}
-                <div className="mt-6 flex items-center gap-3 border-t border-neutral-100 pt-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-neutral-900 text-sm font-bold text-white">
-                    {t.initials}
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-neutral-900">{t.author}</p>
-                    <p className="text-xs text-neutral-500">
-                      {t.role}, {t.hospital}
-                    </p>
-                  </div>
+                <div className="border-t pt-6" style={{ borderColor: 'var(--sand)' }}>
+                  <p
+                    className="text-xs font-medium uppercase tracking-[0.1em]"
+                    style={{ color: 'var(--ink)' }}
+                  >
+                    {t.author}
+                  </p>
+                  <p
+                    className="mt-1 text-xs font-medium uppercase tracking-[0.08em]"
+                    style={{ color: 'var(--sand)' }}
+                  >
+                    {t.role} — {t.hospital}
+                  </p>
                 </div>
               </div>
             </ScrollReveal>

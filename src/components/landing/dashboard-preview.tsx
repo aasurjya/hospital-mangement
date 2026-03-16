@@ -5,47 +5,44 @@ import { ScrollReveal } from './scroll-reveal'
 
 const SCREENS = [
   {
-    title: 'Hospital Dashboard',
+    title: 'Dashboard',
     description: 'Real-time overview of patients, admissions, appointments, and staff activity.',
     content: (
       <div className="space-y-4">
-        {/* Top stats row */}
         <div className="grid grid-cols-4 gap-3">
           {[
-            { label: 'Active Patients', value: '342', color: 'bg-neutral-50 text-neutral-900' },
-            { label: 'Today\'s Appointments', value: '28', color: 'bg-neutral-50 text-neutral-900' },
-            { label: 'Admissions', value: '12', color: 'bg-neutral-50 text-neutral-900' },
-            { label: 'Available Beds', value: '45', color: 'bg-neutral-50 text-neutral-900' },
+            { label: 'Active Patients', value: '342' },
+            { label: "Today's Appts", value: '28' },
+            { label: 'Admissions', value: '12' },
+            { label: 'Available Beds', value: '45' },
           ].map((stat) => (
-            <div key={stat.label} className={`rounded-lg ${stat.color} p-3`}>
-              <p className="text-xs font-medium opacity-70">{stat.label}</p>
-              <p className="text-2xl font-bold">{stat.value}</p>
+            <div key={stat.label} className="rounded p-3" style={{ backgroundColor: '#F0EDE6' }}>
+              <p className="text-[10px] font-medium uppercase tracking-[0.08em]" style={{ color: '#9B9589' }}>{stat.label}</p>
+              <p className="text-2xl font-medium" style={{ color: '#131313' }}>{stat.value}</p>
             </div>
           ))}
         </div>
-        {/* Chart placeholder */}
-        <div className="rounded-lg border border-neutral-100 bg-white p-4">
-          <p className="mb-3 text-xs font-semibold text-neutral-500">Patient Admissions — Last 7 Days</p>
-          <div className="flex items-end gap-2" style={{ height: '80px' }}>
+        <div className="rounded p-4" style={{ border: '1px solid #E8E3DC' }}>
+          <p className="mb-3 text-[10px] font-medium uppercase tracking-[0.1em]" style={{ color: '#9B9589' }}>Patient Admissions — Last 7 Days</p>
+          <div className="flex items-end gap-2" style={{ height: '64px' }}>
             {[40, 65, 50, 80, 60, 90, 75].map((h, i) => (
-              <div key={i} className="flex-1 rounded-t bg-gradient-to-t from-primary-500 to-primary-300 transition-all" style={{ height: `${h}%` }} />
+              <div key={i} className="flex-1 rounded-t" style={{ height: `${h}%`, backgroundColor: '#96C4C8' }} />
             ))}
           </div>
-          <div className="mt-1 flex justify-between text-[10px] text-neutral-400">
+          <div className="mt-1 flex justify-between" style={{ fontSize: '9px', color: '#9B9589' }}>
             <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
           </div>
         </div>
-        {/* Recent activity */}
         <div className="space-y-2">
           {[
-            { name: 'Dr. Smith admitted patient MRN-2026-A1B2C3D4', time: '2m ago', dot: 'bg-primary-400' },
-            { name: 'Nurse Patel updated vitals for Room 204', time: '5m ago', dot: 'bg-success-400' },
-            { name: 'New appointment scheduled — Dr. Chen', time: '8m ago', dot: 'bg-secondary-400' },
+            { name: 'Dr. Smith admitted patient MRN-2026-A1B2C3D4', time: '2m ago' },
+            { name: 'Nurse Patel updated vitals for Room 204', time: '5m ago' },
+            { name: 'New appointment scheduled — Dr. Chen', time: '8m ago' },
           ].map((item, i) => (
-            <div key={i} className="flex items-center gap-3 rounded-md bg-neutral-50 px-3 py-2">
-              <div className={`h-2 w-2 shrink-0 rounded-full ${item.dot}`} />
-              <p className="flex-1 truncate text-xs text-neutral-700">{item.name}</p>
-              <span className="shrink-0 text-[10px] text-neutral-400">{item.time}</span>
+            <div key={i} className="flex items-center gap-3 rounded px-3 py-2" style={{ backgroundColor: '#F0EDE6' }}>
+              <div className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: '#96C4C8' }} />
+              <p className="flex-1 truncate text-xs" style={{ color: '#131313' }}>{item.name}</p>
+              <span className="shrink-0 text-[10px]" style={{ color: '#9B9589' }}>{item.time}</span>
             </div>
           ))}
         </div>
@@ -53,34 +50,32 @@ const SCREENS = [
     ),
   },
   {
-    title: 'Patient Management',
+    title: 'Patients',
     description: 'Complete patient profiles with MRN, demographics, history, and quick search.',
     content: (
       <div className="space-y-4">
-        {/* Search bar */}
-        <div className="flex items-center gap-2 rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2">
-          <svg className="h-4 w-4 text-neutral-400" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" aria-hidden="true">
+        <div className="flex items-center gap-2 rounded px-3 py-2.5" style={{ border: '1px solid #E8E3DC', backgroundColor: '#F9F8F5' }}>
+          <svg className="h-3.5 w-3.5" style={{ color: '#9B9589' }} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
           </svg>
-          <span className="text-xs text-neutral-400">Search patients by name or MRN...</span>
+          <span className="text-xs" style={{ color: '#9B9589' }}>Search patients by name or MRN...</span>
         </div>
-        {/* Patient list */}
-        <div className="divide-y divide-neutral-100 rounded-lg border border-neutral-100">
+        <div className="divide-y rounded" style={{ border: '1px solid #E8E3DC', borderColor: '#E8E3DC' }}>
           {[
-            { name: 'Sarah Johnson', mrn: 'MRN-2026-A1B2C3D4', age: '34 F', status: 'Admitted', statusColor: 'bg-primary-100 text-primary-700' },
-            { name: 'James Williams', mrn: 'MRN-2026-E5F6G7H8', age: '67 M', status: 'Outpatient', statusColor: 'bg-success-100 text-success-700' },
-            { name: 'Maria Garcia', mrn: 'MRN-2026-I9J0K1L2', age: '45 F', status: 'Admitted', statusColor: 'bg-primary-100 text-primary-700' },
-            { name: 'Robert Chen', mrn: 'MRN-2026-M3N4O5P6', age: '52 M', status: 'Discharged', statusColor: 'bg-neutral-100 text-neutral-600' },
+            { name: 'Sarah Johnson', mrn: 'MRN-2026-A1B2', age: '34 F', status: 'Admitted' },
+            { name: 'James Williams', mrn: 'MRN-2026-E5F6', age: '67 M', status: 'Outpatient' },
+            { name: 'Maria Garcia', mrn: 'MRN-2026-I9J0', age: '45 F', status: 'Admitted' },
+            { name: 'Robert Chen', mrn: 'MRN-2026-M3N4', age: '52 M', status: 'Discharged' },
           ].map((p) => (
-            <div key={p.mrn} className="flex items-center gap-3 px-3 py-2.5">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-100 text-xs font-bold text-primary-700">
+            <div key={p.mrn} className="flex items-center gap-3 px-3 py-2.5" style={{ borderColor: '#E8E3DC' }}>
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[10px] font-medium" style={{ backgroundColor: 'rgba(149,196,200,0.15)', color: '#96C4C8' }}>
                 {p.name.split(' ').map(n => n[0]).join('')}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="truncate text-xs font-semibold text-neutral-800">{p.name}</p>
-                <p className="text-[10px] text-neutral-400">{p.mrn} &middot; {p.age}</p>
+                <p className="truncate text-xs font-medium" style={{ color: '#131313' }}>{p.name}</p>
+                <p className="text-[10px]" style={{ color: '#9B9589' }}>{p.mrn} · {p.age}</p>
               </div>
-              <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium ${p.statusColor}`}>
+              <span className="shrink-0 text-[10px] font-medium uppercase tracking-[0.06em]" style={{ color: '#9B9589' }}>
                 {p.status}
               </span>
             </div>
@@ -90,34 +85,28 @@ const SCREENS = [
     ),
   },
   {
-    title: 'Appointment Scheduling',
+    title: 'Appointments',
     description: 'Book, track, and manage appointments with real-time status updates.',
     content: (
       <div className="space-y-4">
-        {/* Calendar header */}
         <div className="flex items-center justify-between">
-          <p className="text-sm font-semibold text-neutral-800">March 2026</p>
-          <div className="flex gap-1">
-            <div className="rounded bg-neutral-100 px-2 py-1 text-[10px] font-medium text-neutral-500">Today</div>
-          </div>
+          <p className="text-xs font-medium uppercase tracking-[0.08em]" style={{ color: '#131313' }}>March 2026</p>
+          <div className="rounded px-2 py-1 text-[10px] font-medium uppercase tracking-[0.08em]" style={{ backgroundColor: '#F0EDE6', color: '#9B9589' }}>Today</div>
         </div>
-        {/* Time slots */}
         <div className="space-y-2">
           {[
-            { time: '09:00', patient: 'Sarah Johnson', doctor: 'Dr. Smith', status: 'Confirmed', color: 'border-l-secondary-500 bg-secondary-50' },
-            { time: '10:30', patient: 'James Williams', doctor: 'Dr. Chen', status: 'Scheduled', color: 'border-l-primary-500 bg-primary-50' },
-            { time: '11:00', patient: 'Maria Garcia', doctor: 'Dr. Patel', status: 'In Progress', color: 'border-l-success-500 bg-success-50' },
-            { time: '14:00', patient: 'Robert Chen', doctor: 'Dr. Smith', status: 'Scheduled', color: 'border-l-primary-500 bg-primary-50' },
-            { time: '15:30', patient: 'Anna Kim', doctor: 'Dr. Chen', status: 'Scheduled', color: 'border-l-primary-500 bg-primary-50' },
+            { time: '09:00', patient: 'Sarah Johnson', doctor: 'Dr. Smith', status: 'Confirmed' },
+            { time: '10:30', patient: 'James Williams', doctor: 'Dr. Chen', status: 'Scheduled' },
+            { time: '11:00', patient: 'Maria Garcia', doctor: 'Dr. Patel', status: 'In Progress' },
+            { time: '14:00', patient: 'Robert Chen', doctor: 'Dr. Smith', status: 'Scheduled' },
           ].map((slot) => (
-            <div key={slot.time + slot.patient} className={`rounded-lg border-l-4 ${slot.color} px-3 py-2`}>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs font-semibold text-neutral-800">{slot.patient}</p>
-                  <p className="text-[10px] text-neutral-500">{slot.doctor} &middot; {slot.time}</p>
-                </div>
-                <span className="text-[10px] font-medium text-neutral-600">{slot.status}</span>
+            <div key={slot.time + slot.patient} className="flex items-center gap-3 rounded px-3 py-2.5" style={{ border: '1px solid #E8E3DC' }}>
+              <span className="shrink-0 text-[10px] font-medium" style={{ color: '#9B9589', width: '36px' }}>{slot.time}</span>
+              <div className="flex-1">
+                <p className="text-xs font-medium" style={{ color: '#131313' }}>{slot.patient}</p>
+                <p className="text-[10px]" style={{ color: '#9B9589' }}>{slot.doctor}</p>
               </div>
+              <span className="text-[10px] font-medium uppercase tracking-[0.06em]" style={{ color: slot.status === 'In Progress' ? '#96C4C8' : '#9B9589' }}>{slot.status}</span>
             </div>
           ))}
         </div>
@@ -125,46 +114,43 @@ const SCREENS = [
     ),
   },
   {
-    title: 'Real-time Chat',
+    title: 'Chat',
     description: 'Secure messaging between staff — direct, group, and broadcast channels.',
     content: (
-      <div className="flex h-full flex-col">
-        {/* Chat header */}
-        <div className="flex items-center gap-3 border-b border-neutral-100 pb-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-success-100 text-xs font-bold text-success-700">IC</div>
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center gap-3 border-b pb-3" style={{ borderColor: '#E8E3DC' }}>
+          <div className="flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-medium" style={{ backgroundColor: 'rgba(149,196,200,0.15)', color: '#96C4C8' }}>IC</div>
           <div>
-            <p className="text-xs font-semibold text-neutral-800">ICU Team</p>
-            <p className="text-[10px] text-success-600">4 members online</p>
+            <p className="text-xs font-medium uppercase tracking-[0.06em]" style={{ color: '#131313' }}>ICU Team</p>
+            <p className="text-[10px]" style={{ color: '#96C4C8' }}>4 members online</p>
           </div>
         </div>
-        {/* Messages */}
-        <div className="mt-3 flex-1 space-y-3">
+        <div className="flex-1 space-y-3">
           <div className="flex gap-2">
-            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary-100 text-[10px] font-bold text-primary-700">DS</div>
-            <div className="rounded-lg rounded-tl-none bg-neutral-100 px-3 py-2">
-              <p className="text-[10px] font-medium text-neutral-500">Dr. Smith</p>
-              <p className="text-xs text-neutral-800">Patient in Room 204 needs a CBC panel ordered. Elevated temp since 6am.</p>
+            <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[9px] font-medium" style={{ backgroundColor: '#F0EDE6', color: '#131313' }}>DS</div>
+            <div className="rounded-r rounded-bl px-3 py-2" style={{ backgroundColor: '#F0EDE6' }}>
+              <p className="text-[10px] font-medium uppercase tracking-[0.06em]" style={{ color: '#9B9589' }}>Dr. Smith</p>
+              <p className="text-xs" style={{ color: '#131313' }}>Patient in Room 204 needs a CBC panel ordered. Elevated temp since 6am.</p>
             </div>
           </div>
           <div className="flex gap-2">
-            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-success-100 text-[10px] font-bold text-success-700">NP</div>
-            <div className="rounded-lg rounded-tl-none bg-neutral-100 px-3 py-2">
-              <p className="text-[10px] font-medium text-neutral-500">Nurse Patel</p>
-              <p className="text-xs text-neutral-800">On it. Current temp is 38.6C. I&apos;ll draw labs now.</p>
+            <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[9px] font-medium" style={{ backgroundColor: '#F0EDE6', color: '#131313' }}>NP</div>
+            <div className="rounded-r rounded-bl px-3 py-2" style={{ backgroundColor: '#F0EDE6' }}>
+              <p className="text-[10px] font-medium uppercase tracking-[0.06em]" style={{ color: '#9B9589' }}>Nurse Patel</p>
+              <p className="text-xs" style={{ color: '#131313' }}>On it. Current temp is 38.6°C. I&apos;ll draw labs now.</p>
             </div>
           </div>
           <div className="flex flex-row-reverse gap-2">
-            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-secondary-100 text-[10px] font-bold text-secondary-700">You</div>
-            <div className="rounded-lg rounded-tr-none bg-primary-600 px-3 py-2">
-              <p className="text-xs text-white">I&apos;ll review the results as soon as they&apos;re in. Thanks team.</p>
+            <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[9px] font-medium" style={{ backgroundColor: 'rgba(149,196,200,0.15)', color: '#96C4C8' }}>You</div>
+            <div className="rounded-l rounded-br px-3 py-2" style={{ backgroundColor: '#131313' }}>
+              <p className="text-xs" style={{ color: 'rgba(249,248,245,0.9)' }}>I&apos;ll review the results as soon as they&apos;re in. Thanks team.</p>
             </div>
           </div>
         </div>
-        {/* Input */}
-        <div className="mt-3 flex items-center gap-2 rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2">
-          <span className="flex-1 text-xs text-neutral-400">Type a message...</span>
-          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-600">
-            <svg className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" aria-hidden="true">
+        <div className="flex items-center gap-2 rounded px-3 py-2" style={{ border: '1px solid #E8E3DC' }}>
+          <span className="flex-1 text-xs" style={{ color: '#9B9589' }}>Type a message...</span>
+          <div className="flex h-5 w-5 items-center justify-center rounded-full" style={{ backgroundColor: '#131313' }}>
+            <svg className="h-3 w-3" style={{ color: '#F9F8F5' }} fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
             </svg>
           </div>
@@ -173,35 +159,35 @@ const SCREENS = [
     ),
   },
   {
-    title: 'Medical Records',
+    title: 'Records',
     description: 'Structured clinical notes with DRAFT → FINALIZED workflow for data integrity.',
     content: (
-      <div className="space-y-4">
-        <div className="rounded-lg border border-neutral-100 bg-white p-3">
-          <div className="flex items-center justify-between">
+      <div className="space-y-3">
+        <div className="rounded p-4" style={{ border: '1px solid #E8E3DC' }}>
+          <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="text-xs font-semibold text-neutral-800">Clinical Note — Sarah Johnson</p>
-              <p className="text-[10px] text-neutral-400">MRN-2026-A1B2C3D4 &middot; Dr. Smith &middot; March 15, 2026</p>
+              <p className="text-xs font-medium uppercase tracking-[0.06em]" style={{ color: '#131313' }}>Clinical Note — Sarah Johnson</p>
+              <p className="text-[10px] mt-0.5" style={{ color: '#9B9589' }}>MRN-2026-A1B2 · Dr. Smith · March 15, 2026</p>
             </div>
-            <span className="rounded-full bg-warning-100 px-2 py-0.5 text-[10px] font-medium text-warning-700">DRAFT</span>
+            <span className="shrink-0 rounded-full px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.06em]" style={{ backgroundColor: 'rgba(217,211,201,0.3)', color: '#9B9589' }}>Draft</span>
           </div>
-          <div className="mt-3 space-y-2 border-t border-neutral-100 pt-3">
+          <div className="mt-3 space-y-2 border-t pt-3" style={{ borderColor: '#E8E3DC' }}>
             <div>
-              <p className="text-[10px] font-semibold uppercase text-neutral-500">Chief Complaint</p>
-              <p className="text-xs text-neutral-700">Persistent fever and fatigue for 3 days</p>
+              <p className="text-[10px] font-medium uppercase tracking-[0.1em]" style={{ color: '#9B9589' }}>Chief Complaint</p>
+              <p className="text-xs mt-0.5" style={{ color: '#131313' }}>Persistent fever and fatigue for 3 days</p>
             </div>
             <div>
-              <p className="text-[10px] font-semibold uppercase text-neutral-500">Assessment</p>
-              <p className="text-xs text-neutral-700">Suspected UTI, pending culture results. CBC shows elevated WBC at 14,200.</p>
+              <p className="text-[10px] font-medium uppercase tracking-[0.1em]" style={{ color: '#9B9589' }}>Assessment</p>
+              <p className="text-xs mt-0.5" style={{ color: '#131313' }}>Suspected UTI, pending culture results. CBC shows elevated WBC at 14,200.</p>
             </div>
             <div>
-              <p className="text-[10px] font-semibold uppercase text-neutral-500">Plan</p>
-              <p className="text-xs text-neutral-700">Start empiric antibiotics. Follow-up culture in 48h. Monitor temp q4h.</p>
+              <p className="text-[10px] font-medium uppercase tracking-[0.1em]" style={{ color: '#9B9589' }}>Plan</p>
+              <p className="text-xs mt-0.5" style={{ color: '#131313' }}>Start empiric antibiotics. Follow-up culture in 48h. Monitor temp q4h.</p>
             </div>
           </div>
           <div className="mt-3 flex gap-2">
-            <div className="rounded-md bg-success-600 px-3 py-1 text-[10px] font-medium text-white">Finalize</div>
-            <div className="rounded-md border border-neutral-300 px-3 py-1 text-[10px] font-medium text-neutral-600">Edit</div>
+            <div className="rounded px-3 py-1 text-[10px] font-medium uppercase tracking-[0.06em]" style={{ backgroundColor: '#131313', color: '#F9F8F5' }}>Finalize</div>
+            <div className="rounded px-3 py-1 text-[10px] font-medium uppercase tracking-[0.06em]" style={{ border: '1px solid #E8E3DC', color: '#9B9589' }}>Edit</div>
           </div>
         </div>
       </div>
@@ -251,29 +237,31 @@ export function DashboardPreview() {
   const activeScreen = SCREENS[activeTab]
 
   return (
-    <section className="bg-neutral-50 py-32 lg:py-40">
-      <div className="mx-auto max-w-7xl px-4 lg:px-8">
+    <section
+      className="px-6 py-24 lg:px-12 lg:py-36"
+      style={{ backgroundColor: 'var(--cream)', borderTop: '1px solid var(--sand)', color: 'var(--ink)' }}
+    >
+      <div className="mx-auto max-w-[1400px]">
         <ScrollReveal animation="fade-up">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-sm font-semibold uppercase tracking-widest text-neutral-400">
-              Product tour
-            </p>
-            <h2 className="mt-2 text-3xl font-bold tracking-tight text-neutral-900 sm:text-4xl">
-              Every screen designed for clinical speed
+          <div className="mb-16">
+            <p className="section-label mb-3">Product tour</p>
+            <h2
+              className="font-sans font-medium uppercase leading-[0.95] tracking-tight"
+              style={{ fontSize: 'clamp(2.5rem, 5vw, 5.5rem)', color: 'var(--ink)' }}
+            >
+              Every screen<br />
+              <span className="font-display italic font-light" style={{ fontSize: '0.9em' }}>built for clinical speed</span>
             </h2>
-            <p className="mt-4 text-lg leading-relaxed text-neutral-500">
-              Click through to see how HospitalOS handles your daily workflows — from
-              dashboard overview to patient records.
-            </p>
           </div>
         </ScrollReveal>
 
-        <ScrollReveal animation="scale-up" delay={100}>
-          <div className="mx-auto mt-16 max-w-4xl">
+        <ScrollReveal animation="fade-up" delay={100}>
+          <div className="mx-auto max-w-4xl">
             {/* Tab bar */}
             <div
               ref={tablistRef}
-              className="flex gap-1 overflow-x-auto rounded-t-xl border border-b-0 border-neutral-200 bg-neutral-100 p-1.5"
+              className="flex gap-1 overflow-x-auto p-1"
+              style={{ backgroundColor: 'var(--cream-2)', border: '1px solid var(--sand)', borderBottom: 'none', borderRadius: '2px 2px 0 0' }}
               role="tablist"
               aria-label="Product screens"
             >
@@ -287,13 +275,17 @@ export function DashboardPreview() {
                   tabIndex={index === activeTab ? 0 : -1}
                   onClick={() => switchTab(index)}
                   onKeyDown={(e) => handleTabKey(e, index)}
-                  className={`flex items-center gap-2 whitespace-nowrap rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
-                    index === activeTab
-                      ? 'bg-white text-neutral-900 shadow-sm'
-                      : 'text-neutral-500 hover:text-neutral-700 hover:bg-white/50'
-                  }`}
+                  className="flex items-center gap-2 whitespace-nowrap rounded px-4 py-2 transition-all duration-200"
+                  style={{
+                    backgroundColor: index === activeTab ? 'var(--cream)' : 'transparent',
+                    color: index === activeTab ? 'var(--ink)' : 'var(--sand)',
+                    fontSize: '0.625rem',
+                    fontWeight: 500,
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                  }}
                 >
-                  <svg className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true">
+                  <svg className="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" d={TAB_ICONS[index]} />
                   </svg>
                   <span className="hidden sm:inline">{screen.title}</span>
@@ -302,25 +294,37 @@ export function DashboardPreview() {
             </div>
 
             {/* Browser chrome URL bar */}
-            <div className="flex items-center gap-3 border-x border-neutral-200 bg-neutral-50 px-4 py-2">
+            <div
+              className="flex items-center gap-3 px-4 py-2"
+              style={{ borderLeft: '1px solid var(--sand)', borderRight: '1px solid var(--sand)', backgroundColor: 'var(--cream-2)' }}
+            >
               <div className="flex gap-1.5">
-                <div className="h-2.5 w-2.5 rounded-full bg-neutral-300" />
-                <div className="h-2.5 w-2.5 rounded-full bg-neutral-300" />
-                <div className="h-2.5 w-2.5 rounded-full bg-neutral-300" />
+                <div className="h-2 w-2 rounded-full" style={{ backgroundColor: 'var(--sand)' }} />
+                <div className="h-2 w-2 rounded-full" style={{ backgroundColor: 'var(--sand)' }} />
+                <div className="h-2 w-2 rounded-full" style={{ backgroundColor: 'var(--sand)' }} />
               </div>
-              <div className="flex-1 rounded-md bg-white px-3 py-1 text-xs text-neutral-400 border border-neutral-200">
+              <div
+                className="flex-1 rounded px-3 py-1"
+                style={{ border: '1px solid var(--sand)', fontSize: '10px', color: 'var(--sand)', fontWeight: 500, letterSpacing: '0.06em', fontFamily: 'monospace' }}
+              >
                 hospitalos.com{ROUTES[activeTab]}
               </div>
             </div>
 
-            {/* Content panel with directional animation */}
+            {/* Content panel */}
             <div
               id={`panel-${activeTab}`}
               role="tabpanel"
               aria-labelledby={`tab-${activeTab}`}
               tabIndex={0}
-              className="relative overflow-hidden rounded-b-xl border border-neutral-200 bg-white shadow-xl shadow-neutral-200/50"
-              style={{ minHeight: '400px' }}
+              className="relative overflow-hidden"
+              style={{
+                border: '1px solid var(--sand)',
+                borderTop: 'none',
+                backgroundColor: '#F9F8F5',
+                minHeight: '360px',
+                borderRadius: '0 0 2px 2px',
+              }}
             >
               <div
                 key={activeTab}
@@ -330,10 +334,20 @@ export function DashboardPreview() {
               </div>
             </div>
 
-            {/* Description below */}
-            <div className="mt-6 text-center">
-              <h3 className="text-lg font-semibold text-neutral-900">{activeScreen.title}</h3>
-              <p className="mt-1 text-sm text-neutral-500">{activeScreen.description}</p>
+            {/* Description */}
+            <div className="mt-6">
+              <h3
+                className="font-sans text-sm font-medium uppercase tracking-[0.06em]"
+                style={{ color: 'var(--ink)' }}
+              >
+                {activeScreen.title}
+              </h3>
+              <p
+                className="mt-1 text-xs font-medium uppercase tracking-[0.05em]"
+                style={{ color: 'var(--sand)' }}
+              >
+                {activeScreen.description}
+              </p>
             </div>
           </div>
         </ScrollReveal>
