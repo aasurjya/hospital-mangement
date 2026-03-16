@@ -8,7 +8,19 @@
     "start": "next start",
     "lint": "eslint",
     "test": "jest",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:report": "playwright show-report e2e/playwright-report",
+    "test:e2e:auth": "playwright test --project=auth-tests",
+    "test:e2e:platform": "playwright test --project=platform-admin-tests",
+    "test:e2e:clinical": "playwright test --project=clinical-tests",
+    "test:e2e:billing": "playwright test --project=billing-tests",
+    "test:e2e:rooms": "playwright test --project=rooms-tests",
+    "test:e2e:reports": "playwright test --project=reports-tests",
+    "test:e2e:rbac": "playwright test --project=rbac-tests"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",
@@ -20,6 +32,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "@tailwindcss/postcss": "^4",
     "@types/jest": "^30.0.0",
     "@types/node": "^20",
