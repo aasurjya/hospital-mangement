@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { requireAuth } from '@/lib/rbac/guards'
 import { createSupabaseServerClient } from '@/lib/supabase/server'
+import { formatLabel } from '@/lib/format'
 
 export const metadata = { title: 'Patient Detail' }
 
@@ -14,28 +15,55 @@ export default async function PatientDetailPage({
 
   const supabase = await createSupabaseServerClient()
 
-  const [{ data: patient }, { data: appointments }, { data: admissions }, { data: records }, { data: invoices }] =
-    await Promise.all([
-      supabase.from('patients').select('*').eq('id', id).eq('hospital_id', profile.hospital_id!).single(),
-      supabase.from('appointments')
-        .select('id, scheduled_at, status, reason, doctor_id')
-        .eq('patient_id', id).order('scheduled_at', { ascending: false }).limit(5),
-      supabase.from('admissions')
-        .select('id, admitted_at, discharged_at, status, reason, bed_number')
-        .eq('patient_id', id).order('admitted_at', { ascending: false }).limit(5),
-      supabase.from('medical_records')
-        .select('id, visit_date, chief_complaint, status')
-        .eq('patient_id', id).order('visit_date', { ascending: false }).limit(5),
-      supabase.from('invoices')
-        .select('id, invoice_number, status, total, amount_paid, created_at')
-        .eq('patient_id', id).eq('hospital_id', profile.hospital_id!).order('created_at', { ascending: false }).limit(5),
-    ])
+  const [
+    { data: patient },
+    { data: appointments },
+    { data: admissions },
+    { data: records },
+    { data: invoices },
+    { data: allergies },
+    { data: diagnoses },
+    { data: vitals },
+    { data: prescriptions },
+    { data: labOrders },
+  ] = await Promise.all([
+    supabase.from('patients').select('*').eq('id', id).eq('hospital_id', profile.hospital_id!).single(),
+    supabase.from('appointments')
+      .select('id, scheduled_at, status, reason, doctor_id')
+      .eq('patient_id', id).order('scheduled_at', { ascending: false }).limit(5),
+    supabase.from('admissions')
+      .select('id, admitted_at, discharged_at, status, reason, bed_number')
+      .eq('patient_id', id).order('admitted_at', { ascending: false }).limit(5),
+    supabase.from('medical_records')
+      .select('id, visit_date, chief_complaint, status')
+      .eq('patient_id', id).order('visit_date', { ascending: false }).limit(5),
+    supabase.from('invoices')
+      .select('id, invoice_number, status, total, amount_paid, created_at')
+      .eq('patient_id', id).eq('hospital_id', profile.hospital_id!).order('created_at', { ascending: false }).limit(5),
+    supabase.from('patient_allergies')
+      .select('id, allergen_name, allergen_type, severity, status')
+      .eq('patient_id', id).eq('status', 'ACTIVE').order('created_at', { ascending: false }).limit(10),
+    supabase.from('patient_diagnoses')
+      .select('id, description, icd10_code, status, diagnosed_date')
+      .eq('patient_id', id).in('status', ['ACTIVE', 'CHRONIC']).order('diagnosed_date', { ascending: false }).limit(10),
+    supabase.from('vital_signs')
+      .select('id, systolic_bp, diastolic_bp, heart_rate, temperature, o2_saturation, recorded_at')
+      .eq('patient_id', id).order('recorded_at', { ascending: false }).limit(1),
+    supabase.from('prescriptions')
+      .select('id, drug_name, dosage, frequency, status')
+      .eq('patient_id', id).eq('status', 'ACTIVE').order('created_at', { ascending: false }).limit(5),
+    supabase.from('lab_orders')
+      .select('id, order_number, test_name, status, priority, created_at')
+      .eq('patient_id', id).order('created_at', { ascending: false }).limit(5),
+  ])
 
   if (!patient) notFound()
 
   const age = patient.date_of_birth
     ? Math.floor((Date.now() - new Date(patient.date_of_birth).getTime()) / 31557600000)
     : null
+
+  const latestVitals = vitals?.[0] ?? null
 
   return (
     <div className="mx-auto max-w-4xl p-6 space-y-6">
@@ -58,11 +86,32 @@ export default async function PatientDetailPage({
         </div>
       </div>
 
+      {/* Active allergies alert */}
+      {allergies && allergies.length > 0 && (
+        <div className="rounded-md bg-error-50 border border-error-200 p-3">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-medium text-error-700">
+              Active Allergies ({allergies.length})
+            </p>
+            <a href={`/hospital/patients/${id}/allergies`} className="text-xs text-error-600 hover:text-error-800">
+              View all →
+            </a>
+          </div>
+          <div className="mt-1 flex flex-wrap gap-2">
+            {allergies.map((a) => (
+              <span key={a.id} className="inline-flex items-center rounded-full bg-error-100 px-2 py-0.5 text-xs font-medium text-error-700">
+                {a.allergen_name} ({formatLabel(a.severity)})
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Demographics */}
       <div className="rounded-lg border border-neutral-200 bg-white divide-y divide-neutral-100">
         {[
           ['Age / DOB', age !== null ? `${age} yrs  (${new Date(patient.date_of_birth!).toLocaleDateString()})` : '—'],
-          ['Gender', patient.gender],
+          ['Gender', patient.gender ? formatLabel(patient.gender) : null],
           ['Blood type', patient.blood_type],
           ['Phone', patient.phone],
           ['Email', patient.email],
@@ -80,6 +129,76 @@ export default async function PatientDetailPage({
           </div>
         ) : null)}
       </div>
+
+      {/* Latest vitals */}
+      {latestVitals && (
+        <div className="rounded-lg border border-neutral-200 bg-white p-4">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-sm font-medium text-neutral-500">Latest Vitals</h2>
+            <a href={`/hospital/patients/${id}/vitals`} className="text-xs text-primary-600 hover:text-primary-800">
+              View all →
+            </a>
+          </div>
+          <div className="grid grid-cols-3 gap-3 sm:grid-cols-5">
+            {latestVitals.systolic_bp && latestVitals.diastolic_bp && (
+              <MiniVital label="BP" value={`${latestVitals.systolic_bp}/${latestVitals.diastolic_bp}`} />
+            )}
+            {latestVitals.heart_rate && <MiniVital label="HR" value={`${latestVitals.heart_rate} bpm`} />}
+            {latestVitals.temperature && <MiniVital label="Temp" value={`${latestVitals.temperature}°C`} />}
+            {latestVitals.o2_saturation && <MiniVital label="SpO2" value={`${latestVitals.o2_saturation}%`} />}
+          </div>
+          <p className="mt-1 text-xs text-neutral-400">{new Date(latestVitals.recorded_at).toLocaleString()}</p>
+        </div>
+      )}
+
+      {/* Active diagnoses */}
+      <SummarySection
+        title="Active Diagnoses"
+        href={`/hospital/patients/${id}/diagnoses`}
+        newHref={`/hospital/patients/${id}/diagnoses`}
+        empty={!diagnoses?.length}
+      >
+        {diagnoses?.map((d) => (
+          <div key={d.id} className="flex items-center justify-between py-2 text-sm border-b last:border-0">
+            <span className="text-neutral-700">{d.description}</span>
+            {d.icd10_code && <span className="font-mono text-xs text-neutral-400">{d.icd10_code}</span>}
+            <StatusBadge status={d.status} />
+          </div>
+        ))}
+      </SummarySection>
+
+      {/* Active prescriptions */}
+      <SummarySection
+        title="Active Prescriptions"
+        href={`/hospital/prescriptions?patientId=${id}`}
+        newHref={`/hospital/prescriptions/new?patientId=${id}`}
+        empty={!prescriptions?.length}
+      >
+        {prescriptions?.map((rx) => (
+          <div key={rx.id} className="flex items-center justify-between py-2 text-sm border-b last:border-0">
+            <span className="text-neutral-700 font-medium">{rx.drug_name}</span>
+            <span className="text-neutral-500">{rx.dosage} &middot; {rx.frequency}</span>
+          </div>
+        ))}
+      </SummarySection>
+
+      {/* Recent lab orders */}
+      <SummarySection
+        title="Lab Orders"
+        href={`/hospital/labs?patientId=${id}`}
+        newHref={`/hospital/labs/new?patientId=${id}`}
+        empty={!labOrders?.length}
+      >
+        {labOrders?.map((l) => (
+          <div key={l.id} className="flex items-center justify-between py-2 text-sm border-b last:border-0">
+            <a href={`/hospital/labs/${l.id}`} className="font-mono text-primary-600 hover:text-primary-800 text-xs">
+              {l.order_number}
+            </a>
+            <span className="text-neutral-700">{l.test_name}</span>
+            <StatusBadge status={l.status} />
+          </div>
+        ))}
+      </SummarySection>
 
       {/* Recent appointments */}
       <SummarySection
@@ -156,6 +275,15 @@ export default async function PatientDetailPage({
   )
 }
 
+function MiniVital({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded bg-neutral-50 px-2 py-1.5 text-center">
+      <p className="text-[10px] text-neutral-500">{label}</p>
+      <p className="text-sm font-semibold text-neutral-900">{value}</p>
+    </div>
+  )
+}
+
 function SummarySection({
   title, href, newHref, empty, children,
 }: {
@@ -193,10 +321,15 @@ function StatusBadge({ status }: { status: string }) {
     PARTIAL: 'bg-caution-100 text-caution-800',
     ISSUED: 'bg-primary-100 text-primary-700',
     VOID: 'bg-neutral-100 text-neutral-500',
+    ACTIVE: 'bg-primary-100 text-primary-700',
+    CHRONIC: 'bg-caution-100 text-caution-800',
+    ORDERED: 'bg-primary-100 text-primary-700',
+    SAMPLE_COLLECTED: 'bg-caution-100 text-caution-800',
+    PROCESSING: 'bg-secondary-100 text-secondary-700',
   }
   return (
     <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${colors[status] ?? 'bg-neutral-100 text-neutral-500'}`}>
-      {status}
+      {status.replace(/_/g, ' ')}
     </span>
   )
 }

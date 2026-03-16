@@ -16,12 +16,24 @@
 - **Phase 6**: Reporting dashboard (occupancy, financial, patients, appointments, staff workload, CSV export)
 - **Phase 7**: Patient self-service portal (dashboard, appointments, admissions, records, billing, chat, profile, visit history, feedback, documents, patient nav)
 - **Phase 8**: AI Clinical Assistant (SOAP notes, differential diagnosis, drug interactions, patient summary, audit trail, human-in-the-loop)
+- **Phase 9**: Clinical Foundation (patient allergies with severity/reaction, diagnoses with ICD-10 codes, vital signs with trend tracking)
+- **Phase 10**: Prescriptions & Medications (drug formulary, prescription lifecycle, drug-allergy safety check with override, medication orders: ordered→dispensed→administered)
+- **Phase 11**: Lab Orders & Results (lab test catalogue, order lifecycle ORDERED→SAMPLE_COLLECTED→PROCESSING→COMPLETED, result entry with abnormal flagging)
+- **Phase 12**: Discharge Summaries (auto-populated from diagnoses/prescriptions/vitals, DRAFT→FINALIZED lifecycle, linked to admissions)
+- **Phase 13**: Email/SMS Notifications (notification templates with variable interpolation, notification log/queue, per-hospital event configuration)
+- **Phase 14**: Staff Scheduling + OPD Queue (shift schedules with swap requests, outpatient queue with triage levels and sequential tokens)
+- **Phase 15**: OR Scheduling + Inventory (operating room case management, inventory with stock tracking/alerts/transactions)
+- **Phase 16**: Analytics (recharts trend charts) + Bed Board (real-time visual board, auto-populated beds per room)
+- **Nav restructuring**: Dropdown groups (Clinical, Operations, Finance, Admin) for 20+ nav items
 
 ### Design Decisions (Permanent)
 - No separate patient auth flow (patients use admin-created accounts, same login)
 - No email-based password reset (admin-initiated verbal reset is the workflow)
 - No self-service account creation (all accounts created by admins)
-- Email notifications — deferred, not currently planned
+- ICD-10 codes stored as plain text (not FK to reference table)
+- Drug-allergy check is soft-block with documented override reason
+- Lab order numbers auto-generated: LAB-YYYY-XXXXXXXX
+- Beds auto-populated (1 per room) on migration
 
 ---
 
@@ -34,6 +46,7 @@
 | Styling | Tailwind CSS (8dp grid, `text-gray-600` minimum for contrast) |
 | Validation | Zod (server-side schema validation in all actions) |
 | AI | Anthropic SDK (@anthropic-ai/sdk), Claude Sonnet 4.6 |
+| Charts | Recharts (React charting library) |
 | Testing | Jest |
 | Package manager | npm |
 
@@ -48,10 +61,14 @@ src/
 │   │   ├── layout.tsx                       — requireAuth() + HospitalNav + <main>
 │   │   ├── dashboard/                       — Stats, quick actions (real data)
 │   │   ├── patients/                        — Patient CRUD, search, detail view
-│   │   │   ├── [id]/page.tsx                — Demographics, appointments, admissions, records
+│   │   │   ├── [id]/page.tsx                — Demographics, allergies, vitals, diagnoses, prescriptions, labs, records
+│   │   │   ├── [id]/allergies/              — Allergy CRUD (DOCTOR, NURSE)
+│   │   │   ├── [id]/diagnoses/              — Diagnosis CRUD (DOCTOR)
+│   │   │   ├── [id]/vitals/                 — Vital signs recording + trend (DOCTOR, NURSE)
 │   │   │   └── new/page.tsx                 — Create patient (MRN auto-generated)
 │   │   ├── admissions/                      — Admit/discharge with room assignment
 │   │   │   ├── new/                         — Patient search combobox, room/dept/doctor selectors
+│   │   │   ├── [id]/discharge-summary/      — Discharge summary (auto-populated, DRAFT→FINALIZED)
 │   │   │   └── admission-rows.tsx           — Discharge with confirmation dialog
 │   │   ├── appointments/                    — Scheduling (status: SCHEDULED→COMPLETED)
 │   │   ├── records/                         — Medical records (DRAFT→FINALIZED)
@@ -80,6 +97,23 @@ src/
 │   │   │   ├── report-tabs.tsx              — Tab navigation + period selector
 │   │   │   ├── stat-card.tsx                — KPI stat card component
 │   │   │   └── queries/                     — Per-section data fetching (occupancy, financial, patients, appointments, staff)
+│   │   ├── prescriptions/                   — Prescription lifecycle (DOCTOR prescribes, PHARMACIST dispenses, NURSE administers)
+│   │   │   ├── page.tsx                     — Prescription list with status actions
+│   │   │   ├── new/                         — Create prescription with drug-allergy check
+│   │   │   └── [id]/page.tsx                — Detail + medication order actions
+│   │   ├── formulary/                       — Drug catalogue CRUD (PHARMACIST, ADMIN)
+│   │   ├── labs/                            — Lab orders + results
+│   │   │   ├── page.tsx                     — Order list with status actions
+│   │   │   ├── new/                         — Create lab order
+│   │   │   ├── [id]/page.tsx                — Order detail + result entry
+│   │   │   └── catalogue/                   — Lab test catalogue CRUD
+│   │   ├── scheduling/                      — Staff shift schedules (weekly calendar)
+│   │   ├── opd/                             — OPD queue board (triage, tokens, live status)
+│   │   ├── or-schedule/                     — Operating room case scheduling
+│   │   ├── inventory/                       — Stock management + alerts + transactions
+│   │   ├── analytics/                       — Recharts trend charts (admissions, revenue, demographics, lab TAT)
+│   │   ├── bed-board/                       — Real-time bed visualization by floor
+│   │   ├── settings/notifications/          — Notification template management (ADMIN)
 │   │   └── chat/                            — Real-time messaging (direct, group, broadcast)
 │   │       ├── [conversationId]/page.tsx     — Message thread
 │   │       └── new/page.tsx                 — Create conversation
@@ -106,7 +140,7 @@ src/
 │   ├── api/reports/export/                  — CSV export endpoint
 │   └── dashboard/                           — Role-based redirect (PATIENT → /patient/)
 ├── components/
-│   ├── hospital-nav.tsx                     — Hospital staff desktop + mobile nav
+│   ├── hospital-nav.tsx                     — Hospital staff nav with dropdown groups (Clinical, Operations, Finance, Admin)
 │   ├── patient-nav.tsx                      — Patient portal nav (MyHealth brand)
 │   └── chat/                                — Message thread, bubble, input, sidebar
 ├── lib/
@@ -133,6 +167,22 @@ src/
 │   │   ├── periods.ts                      — ReportPeriod presets, getDateRange()
 │   │   ├── csv.ts                          — generateCsv() with formula injection prevention
 │   │   └── types.ts                        — Report data type interfaces
+│   ├── clinical/
+│   │   ├── permissions.ts                  — canWriteAllergies(), canWriteDiagnoses(), canWriteVitals()
+│   │   └── schemas.ts                      — Zod schemas for allergies, diagnoses, vitals
+│   ├── prescriptions/
+│   │   ├── permissions.ts                  — canPrescribe(), canDispense(), canAdminister(), canManageFormulary()
+│   │   └── schemas.ts                      — Zod schemas for prescriptions, formulary
+│   ├── labs/
+│   │   ├── permissions.ts                  — canOrderLab(), canProcessLab(), canManageCatalogue()
+│   │   ├── schemas.ts                      — Zod schemas for lab orders, results, catalogue
+│   │   └── order-number.ts                 — generateLabOrderNumber() → "LAB-2026-XXXXXXXX"
+│   ├── notifications/
+│   │   └── permissions.ts                  — canManageNotifications() (HOSPITAL_ADMIN)
+│   ├── scheduling/
+│   │   └── permissions.ts                  — canManageSchedule() (HR_MANAGER, ADMIN)
+│   ├── inventory/
+│   │   └── permissions.ts                  — canManageInventory() (PHARMACIST, OPS_MANAGER, ADMIN)
 │   ├── ai/
 │   │   ├── client.ts                       — Anthropic SDK wrapper, graceful degradation
 │   │   ├── config.ts                       — Model, rate limits, token caps
@@ -158,9 +208,13 @@ src/
 |------|-------|------------|
 | `PLATFORM_ADMIN` | All hospitals | Hospitals, hospital admins, any hospital staff |
 | `HOSPITAL_ADMIN` | Own hospital | Staff (including other HAs), departments, patients |
-| `DOCTOR` | Own hospital | Patients, records, appointments |
-| `NURSE` | Own hospital | Patients, records |
-| `RECEPTIONIST` | Own hospital | Patients, appointments |
+| `DOCTOR` | Own hospital | Patients, records, appointments, prescriptions, lab orders, diagnoses, allergies, vitals, OR cases, AI assistant |
+| `NURSE` | Own hospital | Patients, records, allergies, vitals, medication administration |
+| `RECEPTIONIST` | Own hospital | Patients, appointments, OPD check-in |
+| `PHARMACIST` | Own hospital | Drug formulary, medication dispensing, inventory |
+| `LAB_TECHNICIAN` | Own hospital | Lab catalogue, lab orders processing, result entry |
+| `HR_MANAGER` | Own hospital | Staff scheduling, shift management |
+| `OPERATIONS_MANAGER` | Own hospital | Rooms, inventory |
 | Other staff | Own hospital | Varies by role |
 | `PATIENT` | Own records | Self-service portal: view appointments/admissions/records/billing, request/cancel appointments, submit feedback, upload documents, edit contact info, chat |
 
@@ -171,7 +225,7 @@ src/
 
 ---
 
-## Database Schema (25 migrations)
+## Database Schema (34 migrations)
 
 ### Core Tables
 | Table | Purpose | Key Fields |
@@ -181,13 +235,32 @@ src/
 | `patients` | Patient records | hospital_id, mrn, full_name, user_id (FK auth.users, portal access), allergies, medical_notes |
 | `departments` | Hospital departments | hospital_id, name, head_doctor_id |
 | `rooms` | Hospital rooms/beds | hospital_id, room_number, room_type (enum), floor, is_available |
+| `beds` | Individual beds within rooms | room_id, bed_number, is_available, current_patient_id, current_admission_id |
 
 ### Clinical Tables
 | Table | Purpose | Key Fields |
 |-------|---------|------------|
-| `admissions` | Patient admissions | patient_id, doctor_id, department_id, room_id, status (ADMITTED/DISCHARGED/TRANSFERRED) |
+| `admissions` | Patient admissions | patient_id, doctor_id, department_id, room_id, bed_id, status (ADMITTED/DISCHARGED/TRANSFERRED) |
 | `appointments` | Scheduled visits | patient_id, doctor_id, scheduled_at, status (SCHEDULED→COMPLETED) |
 | `medical_records` | Clinical notes | patient_id, author_id, chief_complaint, status (DRAFT/FINALIZED) |
+| `patient_allergies` | Allergy records | allergen_name, allergen_type, severity, reaction, status (ACTIVE/INACTIVE/RESOLVED) |
+| `patient_diagnoses` | Diagnoses with ICD-10 | icd10_code, description, status (ACTIVE/RESOLVED/CHRONIC/RULED_OUT), diagnosed_date |
+| `vital_signs` | Vital sign measurements | systolic_bp, diastolic_bp, heart_rate, temperature, o2_saturation, bmi (computed), pain_scale |
+| `discharge_summaries` | Discharge documentation | admission_id (UNIQUE), diagnoses, medications snapshot, follow-up, status (DRAFT/FINALIZED) |
+
+### Prescription & Medication Tables
+| Table | Purpose | Key Fields |
+|-------|---------|------------|
+| `drug_formulary` | Hospital medication catalogue | generic_name, brand_name, form, strength, category |
+| `prescriptions` | Patient prescriptions | drug_name, dosage, route, frequency, status (ACTIVE/COMPLETED/CANCELLED/DISCONTINUED), allergy_override |
+| `medication_orders` | Dispense→administer lifecycle | prescription_id, status (ORDERED→DISPENSED→ADMINISTERED), dispensed_by, administered_by |
+
+### Lab Tables
+| Table | Purpose | Key Fields |
+|-------|---------|------------|
+| `lab_test_catalogue` | Hospital test menu | test_name, test_code, sample_type, normal_range, price |
+| `lab_orders` | Lab test orders | order_number (auto), priority (ROUTINE/URGENT/STAT), status (ORDERED→COMPLETED) |
+| `lab_results` | Test results | result_value, unit, normal_range, is_abnormal, interpretation, verified_by |
 
 ### Billing Tables
 | Table | Purpose | Key Fields |
@@ -195,6 +268,27 @@ src/
 | `invoices` | Invoice headers | hospital_id, patient_id, invoice_number, status (DRAFT/ISSUED/PAID/PARTIAL/VOID), total, amount_paid |
 | `invoice_items` | Line items | invoice_id, description, quantity, unit_price, total |
 | `payments` | Payment records | invoice_id, hospital_id, amount, method (CASH/CHECK/BANK_TRANSFER/MOBILE_MONEY/INSURANCE/OTHER) |
+
+### Scheduling & Operations Tables
+| Table | Purpose | Key Fields |
+|-------|---------|------------|
+| `shift_schedules` | Staff shift schedules | staff_id, shift_type (MORNING/AFTERNOON/NIGHT/ON_CALL), shift_date, start_time, end_time |
+| `shift_swap_requests` | Shift swap requests | requester_shift_id, target_staff_id, status (PENDING/APPROVED/REJECTED) |
+| `opd_queue` | Outpatient queue | token_number (daily sequential), triage_level, status (WAITING/IN_CONSULTATION/COMPLETED) |
+| `or_cases` | Operating room scheduling | patient_id, room_id, primary_surgeon_id, procedure_name, anesthesia_type, status |
+
+### Inventory Tables
+| Table | Purpose | Key Fields |
+|-------|---------|------------|
+| `inventory_items` | Stock items | name, quantity_on_hand, reorder_level, cost_per_unit, expiry_date, drug_id |
+| `inventory_transactions` | Stock movements | item_id, transaction_type (PURCHASE/DISPENSED/ADJUSTMENT/EXPIRED/RETURNED), quantity |
+| `inventory_alerts` | Stock alerts | item_id, alert_type (LOW_STOCK/EXPIRED/EXPIRING_SOON), is_resolved |
+
+### Notification Tables
+| Table | Purpose | Key Fields |
+|-------|---------|------------|
+| `notification_templates` | Per-hospital templates | event_key, channel (EMAIL/SMS), body_template with {{variables}} |
+| `notification_log` | Delivery log/queue | recipient, channel, status (PENDING/SENT/FAILED), related_entity |
 
 ### Chat Tables
 | Table | Purpose |
@@ -225,6 +319,28 @@ src/
 - `document_type`: INSURANCE_CARD, ID_DOCUMENT, REFERRAL_LETTER, OTHER
 - `ai_suggestion_type`: SOAP_NOTE, DIFFERENTIAL_DIAGNOSIS, DRUG_INTERACTION, PATIENT_SUMMARY
 - `ai_suggestion_status`: PENDING, ACCEPTED, MODIFIED, REJECTED
+- `allergen_type`: DRUG, FOOD, ENVIRONMENTAL, OTHER
+- `allergy_severity`: MILD, MODERATE, SEVERE, LIFE_THREATENING
+- `allergy_status`: ACTIVE, INACTIVE, RESOLVED
+- `diagnosis_status`: ACTIVE, RESOLVED, CHRONIC, RULED_OUT
+- `drug_form`: TABLET, CAPSULE, LIQUID, INJECTION, TOPICAL, INHALER, DROPS, SUPPOSITORY, PATCH, OTHER
+- `drug_category`: ANTIBIOTIC, ANALGESIC, ANTIHYPERTENSIVE, ... OTHER
+- `prescription_status`: ACTIVE, COMPLETED, CANCELLED, DISCONTINUED
+- `medication_order_status`: ORDERED, DISPENSED, ADMINISTERED, CANCELLED
+- `medication_route`: ORAL, IV, IM, SC, TOPICAL, INHALATION, RECTAL, SUBLINGUAL, TRANSDERMAL, OTHER
+- `lab_sample_type`: BLOOD, URINE, STOOL, CSF, SPUTUM, SWAB, TISSUE, OTHER
+- `lab_order_priority`: ROUTINE, URGENT, STAT
+- `lab_order_status`: ORDERED, SAMPLE_COLLECTED, PROCESSING, COMPLETED, CANCELLED
+- `discharge_summary_status`: DRAFT, FINALIZED
+- `notification_channel`: EMAIL, SMS
+- `notification_status`: PENDING, SENT, FAILED
+- `shift_type`: MORNING, AFTERNOON, NIGHT, ON_CALL
+- `triage_level`: EMERGENCY, URGENT, SEMI_URGENT, NON_URGENT
+- `opd_status`: WAITING, IN_CONSULTATION, COMPLETED
+- `or_case_status`: SCHEDULED, IN_PROGRESS, COMPLETED, CANCELLED
+- `anesthesia_type`: GENERAL, LOCAL, REGIONAL, SPINAL, EPIDURAL, SEDATION, NONE
+- `inventory_transaction_type`: PURCHASE, DISPENSED, ADJUSTMENT, EXPIRED, RETURNED
+- `inventory_alert_type`: LOW_STOCK, EXPIRED, EXPIRING_SOON
 
 ### RLS Policies
 - All tables have RLS enabled
